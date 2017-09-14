@@ -1,0 +1,7 @@
+hostname: vcenter.skynet.lan
+user: ansible@vsphere.local
+pass: "@nS1ble!"
+esxi_hostname: esxi.skynet.lan
+datacenter: Homelab
+datastore: Datastore
+network: "VM Network"

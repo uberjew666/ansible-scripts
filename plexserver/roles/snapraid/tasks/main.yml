@@ -1,0 +1,46 @@
+---
+- name: install dependancies
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - gcc
+    - git
+    - make
+
+- name: extract snapraid tarball
+  unarchive:
+    src: https://github.com/amadvance/snapraid/releases/download/v{{ snapraid_version }}/snapraid-{{ snapraid_version }}.tar.gz
+    dest: "{{ workspace }}"
+    remote_src: True
+
+- name: configure snapraid
+  command: ./configure
+  args:
+    chdir: "{{ workspace }}/snapraid-{{ snapraid_version }}/"
+    creates: "{{ workspace }}/snapraid-{{ snapraid_version }}/Makefile"
+
+- name: make snapraid
+  command: make
+  args:
+    chdir: "{{ workspace }}/snapraid-{{ snapraid_version }}/"
+    creates: "{{ workspace }}/snapraid-{{snapraid_version }}/snapraid"
+
+- name: install snapraid
+  command: make install
+  args:
+    chdir: "{{ workspace }}/snapraid-{{ snapraid_version }}/"
+    creates: /usr/local/bin/snapraid
+
+- name: set config file
+  copy:
+    src: ../files/snapraid.conf
+    dest: /etc/snapraid.conf
+    owner: root
+    group: root
+    mode: 0640
+
+- name: cleanup mess
+  file:
+    path: "{{ workspace }}/snapraid-{{ snapraid_version }}"
+    state: absent

@@ -1,0 +1,46 @@
+---
+- name: remove older versions on ubuntu
+  when: (ansible_distribution == "Ubuntu" and ansible_distribution_version == "14.04")
+  apt:
+    name: "{{ item }}"
+    state: absent
+  with_items:
+    - docker
+    - docker-engine
+
+- name: install extra prequities for ubuntu
+  when: (ansible_distribution == "Ubuntu" and ansible_distribution_version == "14.04")
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - linux-image-extra-{{ ansible_kernel }}
+    - linux-image-extra-virtual
+
+- name: install docker dependancies
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - apt-transport-https
+    - ca-certificates
+    - curl
+    - software-properties-common
+    - python-pip
+
+- name: add docker gpg key
+  apt_key:
+    url: "http://download.docker.com/linux/ubuntu/gpg"
+    state: present
+
+- name: add docker repo to sources
+  apt_repository:
+    repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable
+    state: present
+
+- name: update apt repo
+  apt:
+    name: docker-ce
+    state: present
+    update_cache: yes
+  register: install_docker

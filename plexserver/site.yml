@@ -1,0 +1,20 @@
+---
+- name: Setup Plexserver from start to finish
+  hosts: plexservers
+  remote_user: simon
+  become: yes
+  become_method: sudo
+
+  roles:
+    - { role: snapraid, tags: snapraid }
+    - { role: mergerfs, tags: mergerfs }
+    - { role: users, tags: users }
+    - { role: docker, tags: docker }
+    - { role: docker-compose, tags: docker-compose }
+    - { role: containers, tags: containers }
+    - { role: netdata, tags: netdata }
+#    - { role: beets, tags: netdata }
+#    - { role: nginx, tags: nginx }
+#    - { role: ufw, tags: firewall }
+#    - { role: samba, tags: share }
+    - { role: cronjobs, tags: cron }

@@ -1,0 +1,7 @@
+---
+
+web_dir: /var/www
+observium_dir: "{{ web_dir }}/observium"
+logs_dir: "{{ observium_dir }}/logs"
+rrd_dir: "{{ observium_dir }}/rrd"
+db_name: observium

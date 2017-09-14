@@ -1,0 +1,13 @@
+---
+- name: setup ansible authentication
+  hosts: testservers
+  remote_user: ansible
+  become: yes
+  become_method: sudo
+
+  tasks:
+    - name: update server
+      apt:
+        update_cache: yes
+        upgrade: safe
+        autoremove: yes

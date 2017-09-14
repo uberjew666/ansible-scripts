@@ -1,0 +1,14 @@
+---
+- name: download mergerfs package
+  get_url:
+    url: https://github.com/trapexit/mergerfs/releases/download/{{ mergerfs_version }}/mergerfs_{{ mergerfs_version }}.{{ ansible_distribution }}-{{ ansible_distribution_release }}_amd64.deb
+    dest: "{{ workspace }}/mergerfs.deb"
+
+- name: install mergerfs
+  apt:
+    deb: "{{ workspace }}/mergerfs.deb"
+
+- name: cleanup mess
+  file:
+    path: "{{ workspace }}/mergerfs.deb"
+    state: absent
