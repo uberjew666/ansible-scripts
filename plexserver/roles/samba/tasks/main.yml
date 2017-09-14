@@ -1,0 +1,22 @@
+---
+- name: Install Samba
+  apt:
+    name: samba
+    state: present
+
+- name: Configure Samba
+  template:
+    name: smb.j2
+    dest: /etc/samba/smb.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: Restart Samba
+
+- name: Check Samba is running
+  wait_for:
+    host: "{{ ansible_default_ipv4.address }}"
+    port: 445
+    delay: 3
+    timeout: 60
+  delegate_to: localhost

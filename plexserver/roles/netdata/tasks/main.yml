@@ -1,0 +1,47 @@
+---
+- name: Install prerequisites
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - zlib1g-dev
+    - uuid-dev
+    - libmnl-dev
+    - gcc
+    - make
+    - git
+    - autoconf
+    - autoconf-archive
+    - autogen
+    - automake
+    - pkg-config curl
+
+- name: Clone Netdata repo
+  git:
+    repo: https://github.com/firehol/netdata.git
+    dest: /opt/netdata
+    depth: 1
+    update: yes
+
+- name: Install Netdata
+  shell: ./netdata-installer.sh
+  args:
+    chdir: /opt/netdata
+  register: netdata_install_status
+
+- name: Change bind address
+  lineinfile:
+    path: /etc/netdata/netdata.conf
+    regexp: 'bind to ='
+    line: 'bind to = 127.0.0.1'
+    owner: netdata
+    group: netdata
+    mode: 0660
+  notify: Restart Netdata
+
+- name: create cronjobs
+  cron:
+    name: set netdata updater
+    minute: 0
+    hour: 6
+    job: "/opt/netdata/netdata-updater.sh"

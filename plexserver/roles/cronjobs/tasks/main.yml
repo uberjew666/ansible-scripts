@@ -1,11 +1,4 @@
 ---
-- name: create cronjobs
-  cron:
-    name: set netdata updater
-    minute: 0
-    hour: 6
-    job: "/opt/netdata/netdata-updater.sh"
-
 - name: another cronjob
   cron:
     name: enable trim

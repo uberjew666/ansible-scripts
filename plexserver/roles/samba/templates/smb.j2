@@ -1,0 +1,37 @@
+[global]
+workgroup = WORKGROUP
+wins support = yes
+log level = 1
+max log size = 1000
+interfaces = {{ ansible_default_ipv4.address }}
+bind interfaces only = yes
+unix extensions = no
+
+[share]
+path = {{ media_dir }}
+comment = Storage Pool
+writable = yes
+write list = @smbaccess
+valid users = simon, alan
+create mode = 0664
+directory mode = 0775
+wide links = yes
+follow symlinks = yes
+
+[downloads]
+path = {{ download_dir }}
+comment = Downloads, duh
+writable = yes
+write list = @smbaccess
+valid users = simon
+create mode = 0664
+directory mode = 0775
+
+[alan]
+path = {{ media_dir }}/Videos/Alan
+comment = Alan's folder
+writable = yes
+write list = alan
+valid users = alan
+create mode = 0664
+directory mode = 0775
