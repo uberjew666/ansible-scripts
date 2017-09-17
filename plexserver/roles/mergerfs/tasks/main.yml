@@ -20,9 +20,15 @@
     marker: "# {mark} MergerFS Disk Pool"
     insertafter: EOF
     block: |
-      {{ mount_dir }}/{{ disks.8.name }}:{{ mount_dir }}/{{ disks.9.name }}:{{ mount_dir }}/{{ disks.10.name }}:{{ mount_dir }}/{{ disks.12.name }}:{{ mount_dir }}/{{ disks.13.name }}:{{ mount_dir }}/{{ disks.14.name }} /storage fuse.mergerfs category.create=eplfs,moveonenospc=true,defaults,allow_other,minfreespace=20G,fsname=StoragePool
+      {{ mount_dir }}/{{ disks.8.name }}:{{ mount_dir }}/{{ disks.9.name }}:{{ mount_dir }}/{{ disks.10.name }}:{{ mount_dir }}/{{ disks.12.name }}:{{ mount_dir }}/{{ disks.13.name }}:{{ mount_dir }}/{{ disks.14.name }} {{ data_dir }} fuse.mergerfs category.create=eplfs,moveonenospc=true,defaults,allow_other,minfreespace=20G,fsname=StoragePool
+
+- name: Create mount folders
+  file:
+    path: "{{ data_dir }}"
+    state: directory
+    mode: 0755
 
 - name: Mount data disks
   shell: mount -av
   args:
-    creates: /storage
+    creates: "{{ data_dir }}"

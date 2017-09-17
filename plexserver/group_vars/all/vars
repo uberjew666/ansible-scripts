@@ -2,14 +2,17 @@
 
 # Default workspace
 workspace: /tmp
+# Snapraid mount directory
+mount_dir: /mnt/data
+# Mergerfs mount directory
+data_dir: /storage
 # Container config directory
 configs_dir: /opt/configs
 # Downloads directory
 download_dir: /downloads
 # Media directory
-media_dir: /storage/media
-# Snapraid mount directory
-mount_dir: /mnt/data
+media_dir: {{ data_dir }}/media
+
 
 # Snapraid variables
 snapraid_version: 11.1
