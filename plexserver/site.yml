@@ -1,9 +1,7 @@
 ---
 - name: Setup Plexserver from start to finish
   hosts: plexservers
-  remote_user: simon
   become: yes
-  become_method: sudo
 
   roles:
     - { role: snapraid, tags: snapraid }

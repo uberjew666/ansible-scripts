@@ -1,19 +1,19 @@
 ---
-- name: download mergerfs package
+- name: Download MergerFS deb package
   get_url:
     url: https://github.com/trapexit/mergerfs/releases/download/{{ mergerfs_version }}/mergerfs_{{ mergerfs_version }}.{{ ansible_distribution }}-{{ ansible_distribution_release }}_amd64.deb
     dest: "{{ workspace }}/mergerfs.deb"
 
-- name: install mergerfs
+- name: Install Mergerfs
   apt:
     deb: "{{ workspace }}/mergerfs.deb"
 
-- name: cleanup mess
+- name: Remove the mess
   file:
     path: "{{ workspace }}/mergerfs.deb"
     state: absent
 
-- name: Add Parity disks to fstab
+- name: Add MergerFS mount to fstab
   blockinfile:
     path: /etc/fstab
     backup: yes
@@ -34,10 +34,12 @@
     creates: "{{ data_dir }}"
 
 - name: Check Snapraid is configured
-  shell: snapraid Check
+  shell: snapraid check
   changed_when: false
   register: snapraid_check
 
 - name: Sync Snapraid
   shell: snapraid sync
-  when: snapraid_check contains "No content file found. Assuming empty."
+  args:
+    creates: /var/snapraid.content
+  when: "'No content file found. Assuming empty.' in snapraid_check.stderr"
