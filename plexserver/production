@@ -1,0 +1,5 @@
+[plexservers]
+fatboy.skynet.lan
+
+[monitoring]
+syslog.skynet.lan
