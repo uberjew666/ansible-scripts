@@ -1,46 +1,41 @@
 ---
-- name: install dependancies
-  apt:
-    name: "{{ item }}"
+- name: Add Snapraid repository
+  apt_repository:
+    repo: ppa:tikhonov/snapraid
     state: present
-  with_items:
-    - gcc
-    - git
-    - make
 
-- name: extract snapraid tarball
-  unarchive:
-    src: https://github.com/amadvance/snapraid/releases/download/v{{ snapraid_version }}/snapraid-{{ snapraid_version }}.tar.gz
-    dest: "{{ workspace }}"
-    remote_src: True
+- name: Install Snapraid
+  apt:
+    name: snapraid
+    state: present
+    update_cache: yes
 
-- name: configure snapraid
-  command: ./configure
-  args:
-    chdir: "{{ workspace }}/snapraid-{{ snapraid_version }}/"
-    creates: "{{ workspace }}/snapraid-{{ snapraid_version }}/Makefile"
-
-- name: make snapraid
-  command: make
-  args:
-    chdir: "{{ workspace }}/snapraid-{{ snapraid_version }}/"
-    creates: "{{ workspace }}/snapraid-{{snapraid_version }}/snapraid"
-
-- name: install snapraid
-  command: make install
-  args:
-    chdir: "{{ workspace }}/snapraid-{{ snapraid_version }}/"
-    creates: /usr/local/bin/snapraid
-
-- name: set config file
+- name: Configure Snapraid
   copy:
-    src: ../files/snapraid.conf
+    src: snapraid.conf
     dest: /etc/snapraid.conf
     owner: root
     group: root
     mode: 0640
 
-- name: cleanup mess
-  file:
-    path: "{{ workspace }}/snapraid-{{ snapraid_version }}"
-    state: absent
+- name: Modify fstab config
+  blockinfile:
+    path: /etc/fstab
+    backup: yes
+    marker: "# {mark} ANSIBLE MANAGED BLOCK"
+    insertafter: EOF
+    block: |
+      # SnapRAID Data Disks
+      UUID=90440fb9-d7b3-4cf5-998b-692f2c791c12 /mnt/disk09     ext4    defaults        0       2
+      UUID=9f042d39-5e8a-48bd-8e32-22b939bb2f0d /mnt/disk10     ext4    defaults        0       2
+      UUID=3de14af2-166e-4265-acac-031d526621fd /mnt/disk11     ext4    defaults        0       2
+      UUID=d3b95ea1-3210-4a60-aca1-88fb7a6c6709 /mnt/disk13     ext4    defaults        0       2
+      UUID=f834525b-ecfb-490b-9fd8-bb4f6325fc66 /mnt/disk14     ext4    defaults        0       2
+      UUID=7e5e480d-4577-4896-94ae-f71c3927c34f /mnt/disk15     ext4    defaults        0       2
+
+      # SnapRAID Parity Disks
+      UUID=85caae8e-390a-4ce7-a32e-e8504685f47e /mnt/disk12     ext4    defaults        0       2
+      UUID=edd9d8b3-7823-4ea7-8760-9182e2529ad0 /mnt/disk16     ext4    defaults        0       2
+
+      # MergerFS Disk Pool
+      /mnt/disk09:/mnt/disk10:/mnt/disk11:/mnt/disk13:/mnt/disk14:/mnt/disk15 /storage fuse.mergerfs category.create=eplfs,moveonenospc=true,defaults,allow_other,minfreespace=20G,fsname=StoragePool
