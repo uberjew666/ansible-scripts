@@ -32,3 +32,12 @@
   shell: mount -av
   args:
     creates: "{{ data_dir }}"
+
+- name: Check Snapraid is configured
+  shell: snapraid Check
+  changed_when: false
+  register: snapraid_check
+
+- name: Sync Snapraid
+  shell: snapraid sync
+  when: snapraid_check contains "No content file found. Assuming empty."
