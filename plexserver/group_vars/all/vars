@@ -8,6 +8,8 @@ configs_dir: /opt/configs
 download_dir: /downloads
 # Media directory
 media_dir: /storage/media
+# Snapraid mount directory
+mount_dir: /mnt/data
 
 # Snapraid variables
 snapraid_version: 11.1

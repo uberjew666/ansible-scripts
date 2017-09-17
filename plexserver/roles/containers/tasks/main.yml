@@ -72,8 +72,8 @@
       - "32413:32413/udp"
       - "32414:32414/udp"
     env:
-      PLEX_CLAIM="CLAIM-DESXP8ERRL2SNGWRDWUK"
-      ADVERTISE_IP="http://192.168.1.50:32400/"
+      PLEX_CLAIM="{{ plex_claim_token }}"
+      ADVERTISE_IP="http://{{ ansible_default_ipv4.address }}:32400/"
       PUID={{ users.14.uid }}
       PGID=1001
       TZ={{ timezone }}

@@ -18,6 +18,14 @@
     group: root
     mode: 0640
 
+- name: Create mount folders
+  file:
+    path: "{{ mount_dir }}/{{ item.name }}"
+    state: directory
+    mode: 0755
+  with_items:
+    - "{{ disks }}"
+
 - name: Modify fstab config
   blockinfile:
     path: /etc/fstab
@@ -26,16 +34,18 @@
     insertafter: EOF
     block: |
       # SnapRAID Data Disks
-      UUID=90440fb9-d7b3-4cf5-998b-692f2c791c12 /mnt/disk09     ext4    defaults        0       2
-      UUID=9f042d39-5e8a-48bd-8e32-22b939bb2f0d /mnt/disk10     ext4    defaults        0       2
-      UUID=3de14af2-166e-4265-acac-031d526621fd /mnt/disk11     ext4    defaults        0       2
-      UUID=d3b95ea1-3210-4a60-aca1-88fb7a6c6709 /mnt/disk13     ext4    defaults        0       2
-      UUID=f834525b-ecfb-490b-9fd8-bb4f6325fc66 /mnt/disk14     ext4    defaults        0       2
-      UUID=7e5e480d-4577-4896-94ae-f71c3927c34f /mnt/disk15     ext4    defaults        0       2
+      UUID={{ item.8.uuid }} {{ mount_dir }}/{{ item.8.name }}     ext4    defaults        0       2
+      UUID={{ item.9.uuid }} {{ mount_dir }}/{{ item.9.name }}    ext4    defaults        0       2
+      UUID={{ item.10.uuid }} {{ mount_dir }}/{{ item.10.name }}     ext4    defaults        0       2
+      UUID={{ item.12.uuid }} {{ mount_dir }}/{{ item.12.name }}     ext4    defaults        0       2
+      UUID={{ item.13.uuid }} {{ mount_dir }}/{{ item.13.name }}     ext4    defaults        0       2
+      UUID={{ item.14.uuid }} {{ mount_dir }}/{{ item.14.name }}     ext4    defaults        0       2
 
       # SnapRAID Parity Disks
-      UUID=85caae8e-390a-4ce7-a32e-e8504685f47e /mnt/disk12     ext4    defaults        0       2
-      UUID=edd9d8b3-7823-4ea7-8760-9182e2529ad0 /mnt/disk16     ext4    defaults        0       2
+      UUID={{ item.11.uuid }} {{ mount_dir }}/{{ item.11.name }}     ext4    defaults        0       2
+      UUID={{ item.15.uuid }} {{ mount_dir }}/{{ item.15.name }}     ext4    defaults        0       2
 
       # MergerFS Disk Pool
-      /mnt/disk09:/mnt/disk10:/mnt/disk11:/mnt/disk13:/mnt/disk14:/mnt/disk15 /storage fuse.mergerfs category.create=eplfs,moveonenospc=true,defaults,allow_other,minfreespace=20G,fsname=StoragePool
+      {{ mount_dir }}/{{ item.8.name }}:{{ mount_dir }}/{{ item.9.name }}:{{ mount_dir }}/{{ item.10.name }}:{{ mount_dir }}/{{ item.12.name }}:{{ mount_dir }}/{{ item.13.name }}:{{ mount_dir }}/{{ item.14.name }} /storage fuse.mergerfs category.create=eplfs,moveonenospc=true,defaults,allow_other,minfreespace=20G,fsname=StoragePool
+  with_items:
+    - "{{ disks }}"
