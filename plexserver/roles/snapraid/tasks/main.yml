@@ -34,18 +34,16 @@
     insertafter: EOF
     block: |
       # SnapRAID Data Disks
-      UUID={{ item.8.uuid }} {{ mount_dir }}/{{ item.8.name }}     ext4    defaults        0       2
-      UUID={{ item.9.uuid }} {{ mount_dir }}/{{ item.9.name }}    ext4    defaults        0       2
-      UUID={{ item.10.uuid }} {{ mount_dir }}/{{ item.10.name }}     ext4    defaults        0       2
-      UUID={{ item.12.uuid }} {{ mount_dir }}/{{ item.12.name }}     ext4    defaults        0       2
-      UUID={{ item.13.uuid }} {{ mount_dir }}/{{ item.13.name }}     ext4    defaults        0       2
-      UUID={{ item.14.uuid }} {{ mount_dir }}/{{ item.14.name }}     ext4    defaults        0       2
+      UUID={{ disks.8.uuid }} {{ mount_dir }}/{{ disks.8.name }}     ext4    defaults        0       2
+      UUID={{ disks.9.uuid }} {{ mount_dir }}/{{ disks.9.name }}    ext4    defaults        0       2
+      UUID={{ disks.10.uuid }} {{ mount_dir }}/{{ disks.10.name }}     ext4    defaults        0       2
+      UUID={{ disks.12.uuid }} {{ mount_dir }}/{{ disks.12.name }}     ext4    defaults        0       2
+      UUID={{ disks.13.uuid }} {{ mount_dir }}/{{ disks.13.name }}     ext4    defaults        0       2
+      UUID={{ disks.14.uuid }} {{ mount_dir }}/{{ disks.14.name }}     ext4    defaults        0       2
 
       # SnapRAID Parity Disks
-      UUID={{ item.11.uuid }} {{ mount_dir }}/{{ item.11.name }}     ext4    defaults        0       2
-      UUID={{ item.15.uuid }} {{ mount_dir }}/{{ item.15.name }}     ext4    defaults        0       2
+      UUID={{ disks.11.uuid }} {{ mount_dir }}/{{ disks.11.name }}     ext4    defaults        0       2
+      UUID={{ disks.15.uuid }} {{ mount_dir }}/{{ disks.15.name }}     ext4    defaults        0       2
 
       # MergerFS Disk Pool
-      {{ mount_dir }}/{{ item.8.name }}:{{ mount_dir }}/{{ item.9.name }}:{{ mount_dir }}/{{ item.10.name }}:{{ mount_dir }}/{{ item.12.name }}:{{ mount_dir }}/{{ item.13.name }}:{{ mount_dir }}/{{ item.14.name }} /storage fuse.mergerfs category.create=eplfs,moveonenospc=true,defaults,allow_other,minfreespace=20G,fsname=StoragePool
-  with_items:
-    - "{{ disks }}"
+      {{ mount_dir }}/{{ disks.8.name }}:{{ mount_dir }}/{{ disks.9.name }}:{{ mount_dir }}/{{ disks.10.name }}:{{ mount_dir }}/{{ disks.12.name }}:{{ mount_dir }}/{{ disks.13.name }}:{{ mount_dir }}/{{ disks.14.name }} /storage fuse.mergerfs category.create=eplfs,moveonenospc=true,defaults,allow_other,minfreespace=20G,fsname=StoragePool
