@@ -26,24 +26,30 @@
   with_items:
     - "{{ disks }}"
 
-- name: Modify fstab config
+- name: Add data disks to fstab
   blockinfile:
     path: /etc/fstab
     backup: yes
-    marker: "# {mark} ANSIBLE MANAGED BLOCK"
+    marker: "# {mark} Snapraid Data Disks"
     insertafter: EOF
     block: |
-      # SnapRAID Data Disks
-      UUID={{ disks.8.uuid }} {{ mount_dir }}/{{ disks.8.name }}     ext4    defaults        0       2
-      UUID={{ disks.9.uuid }} {{ mount_dir }}/{{ disks.9.name }}    ext4    defaults        0       2
-      UUID={{ disks.10.uuid }} {{ mount_dir }}/{{ disks.10.name }}     ext4    defaults        0       2
-      UUID={{ disks.12.uuid }} {{ mount_dir }}/{{ disks.12.name }}     ext4    defaults        0       2
-      UUID={{ disks.13.uuid }} {{ mount_dir }}/{{ disks.13.name }}     ext4    defaults        0       2
-      UUID={{ disks.14.uuid }} {{ mount_dir }}/{{ disks.14.name }}     ext4    defaults        0       2
+      {{ items }}
+  with_items:
+    - UUID={{ disks.8.uuid }} {{ mount_dir }}/{{ disks.8.name }}     ext4    defaults        0       2
+    - UUID={{ disks.9.uuid }} {{ mount_dir }}/{{ disks.9.name }}     ext4    defaults        0       2
+    - UUID={{ disks.10.uuid }} {{ mount_dir }}/{{ disks.10.name }}     ext4    defaults        0       2
+    - UUID={{ disks.12.uuid }} {{ mount_dir }}/{{ disks.12.name }}     ext4    defaults        0       2
+    - UUID={{ disks.13.uuid }} {{ mount_dir }}/{{ disks.13.name }}     ext4    defaults        0       2
+    - UUID={{ disks.14.uuid }} {{ mount_dir }}/{{ disks.14.name }}     ext4    defaults        0       2
 
-      # SnapRAID Parity Disks
-      UUID={{ disks.11.uuid }} {{ mount_dir }}/{{ disks.11.name }}     ext4    defaults        0       2
-      UUID={{ disks.15.uuid }} {{ mount_dir }}/{{ disks.15.name }}     ext4    defaults        0       2
-
-      # MergerFS Disk Pool
-      {{ mount_dir }}/{{ disks.8.name }}:{{ mount_dir }}/{{ disks.9.name }}:{{ mount_dir }}/{{ disks.10.name }}:{{ mount_dir }}/{{ disks.12.name }}:{{ mount_dir }}/{{ disks.13.name }}:{{ mount_dir }}/{{ disks.14.name }} /storage fuse.mergerfs category.create=eplfs,moveonenospc=true,defaults,allow_other,minfreespace=20G,fsname=StoragePool
+- name: Add Parity disks to fstab
+  blockinfile:
+    path: /etc/fstab
+    backup: yes
+    marker: "# {mark} Snapraid Parity Disks"
+    insertafter: EOF
+    block: |
+      {{ items }}
+  with_items:
+    - UUID={{ disks.11.uuid }} {{ mount_dir }}/{{ disks.11.name }}     ext4    defaults        0       2
+    - UUID={{ disks.15.uuid }} {{ mount_dir }}/{{ disks.15.name }}     ext4    defaults        0       2
