@@ -13,7 +13,7 @@
       PUID={{ users.0.uid }}
       PGID=1001
       TZ={{ timezone }}
-    restart: yes
+    restart_policy: always
   tags: sabnzbd
 
 - name: Transmission container
@@ -31,7 +31,7 @@
       PUID={{ users.5.uid }}
       PGID=1001
       TZ={{ timezone }}
-    restart: yes
+    restart_policy: always
   tags: transmission
 
 - name: Hydra container
@@ -49,7 +49,7 @@
       TZ={{ timezone }}
     links:
       - "sabnzbd:sabnzbd"
-    restart: yes
+    restart_policy: always
   tags: hydra
 
 - name: Plex container
@@ -77,7 +77,7 @@
       PUID={{ users.14.uid }}
       PGID=1001
       TZ={{ timezone }}
-    restart: yes
+    restart_policy: always
   tags: plex
 
 - name: Sonarr container
@@ -99,7 +99,7 @@
       - "sabnzbd:sabnzbd"
       - "transmission:transmission"
       - "hydra:hydra"
-    restart: yes
+    restart_policy: always
   tags: sonarr
 
 - name: Couchpotato container
@@ -120,13 +120,13 @@
       - "sabnzbd:sabnzbd"
       - "transmission:transmission"
       - "hydra:hydra"
-    restart: yes
+    restart_policy: always
   tags: couchpotato
 
 - name: Musicbrainz container
   docker_container:
     name: musicbrainz
-    image: linuxserver/musicbrainz
+    image: linuxserver/musicbrainz:68
     volumes:
       - "{{ configs_dir }}/musicbrainz:/config"
       - "/var/local/musicbrainz/data:/data"
@@ -138,7 +138,7 @@
       TZ={{ timezone }}
       BRAINZCODE={{ metabrainz_code }}
       WEBADDRESS={{ ansible_default_ipv4.address }}
-    restart: yes
+    restart_policy: always
   tags: musicbrainz
 
 - name: Headphones container
@@ -160,7 +160,7 @@
       - "transmission:transmission"
       - "hydra:hydra"
       - "musicbrainz:musicbrainz"
-    restart: yes
+    restart_policy: always
   tags: headphones
 
 - name: Plexpy container
@@ -179,7 +179,7 @@
       TZ={{ timezone }}
     links:
       - "plex:plex"
-    restart: yes
+    restart_policy: always
   tags: plexpy
 
 - name: Unifi container
@@ -198,7 +198,7 @@
       PUID={{ users.12.uid }}
       PGID=65534
       TZ={{ timezone }}
-    restart: yes
+    restart_policy: always
   tags: unifi
 
 - name: Mylar container
@@ -219,7 +219,7 @@
       - "sabnzbd:sabnzbd"
       - "transmission:transmission"
       - "hydra:hydra"
-    restart: yes
+    restart_policy: always
   tags: mylar
 
 - name: Lazylibrarian container
@@ -240,5 +240,5 @@
       - "sabnzbd:sabnzbd"
       - "transmission:transmission"
       - "hydra:hydra"
-    restart: yes
+    restart_policy: always
   tags: lazylibrarian
