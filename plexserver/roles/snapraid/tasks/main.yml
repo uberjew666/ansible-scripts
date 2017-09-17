@@ -11,8 +11,8 @@
     update_cache: yes
 
 - name: Configure Snapraid
-  copy:
-    src: snapraid.conf
+  template:
+    src: snapraid.j2
     dest: /etc/snapraid.conf
     owner: root
     group: root

@@ -1,0 +1,53 @@
+content /var/snapraid.content
+#content {{ mount_dir }}/{{ item.0.name }}/snapraid.content
+#content {{ mount_dir }}/{{ item.1.name }}/snapraid.content
+#content {{ mount_dir }}/{{ item.2.name }}/snapraid.content
+#content {{ mount_dir }}/{{ item.3.name }}/snapraid.content
+#content {{ mount_dir }}/{{ item.4.name }}/snapraid.content
+#content {{ mount_dir }}/{{ item.5.name }}/snapraid.content
+#content {{ mount_dir }}/{{ item.6.name }}/snapraid.content
+#3-parity {{ mount_dir }}/{{ item.7.name }}/snapraid.3-parity
+content {{ mount_dir }}/{{ item.8.name }}/snapraid.content
+content {{ mount_dir }}/{{ item.9.name }}/snapraid.content
+content {{ mount_dir }}/{{ item.10.name }}/snapraid.content
+parity {{ mount_dir }}/{{ item.11.name }}/snapraid.parity
+content {{ mount_dir }}/{{ item.12.name }}/snapraid.content
+content {{ mount_dir }}/{{ item.13.name }}/snapraid.content
+content {{ mount_dir }}/{{ item.14.name }}/snapraid.content
+2-parity {{ mount_dir }}/{{ item.15.name }}/snapraid.2-parity
+
+#data {{ item.0.name }} {{ mount_dir }}/{{ item.0.name }}/
+#data {{ item.1.name }} {{ mount_dir }}/{{ item.1.name }}/
+#data {{ item.2.name }} {{ mount_dir }}/{{ item.2.name }}/
+#data {{ item.3.name }} {{ mount_dir }}/{{ item.3.name }}/
+#data {{ item.4.name }} {{ mount_dir }}/{{ item.4.name }}/
+#data {{ item.5.name }} {{ mount_dir }}/{{ item.5.name }}/
+#data {{ item.6.name }} {{ mount_dir }}/{{ item.6.name }}/
+data {{ item.8.name }} {{ mount_dir }}/{{ item.8.name }}/
+data {{ item.9.name }} {{ mount_dir }}/{{ item.9.name }}/
+data {{ item.10.name }} {{ mount_dir }}/{{ item.10.name }}/
+data {{ item.12.name }} {{ mount_dir }}/{{ item.12.name }}/
+data {{ item.13.name }} {{ mount_dir }}/{{ item.13.name }}/
+data {{ item.14.name }} {{ mount_dir }}/{{ item.14.name }}/
+
+#nohidden
+
+exclude *.bak
+exclude *.unrecoverable
+exclude /tmp/
+exclude /lost+found/
+exclude .AppleDouble
+exclude ._AppleDouble
+exclude .DS_Store
+exclude .Thumbs.db
+exclude .fseventsd
+exclude .Spotlight-V100
+exclude .TemporaryItems
+exclude .Trashes
+exclude .AppleDB
+
+blocksize 256
+
+#hashsize 16
+
+#autosave 500
