@@ -8,7 +8,7 @@
     - { role: mergerfs, tags: mergerfs }
     - { role: users, tags: users }
     - { role: docker, tags: docker }
-    - { role: docker-compose, tags: docker-compose }
+    - { role: docker-compose, tags: compose }
     - { role: containers, tags: containers }
     - { role: netdata, tags: netdata }
     - { role: cronjobs, tags: cron }

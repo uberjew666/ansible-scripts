@@ -126,12 +126,12 @@
 - name: Musicbrainz container
   docker_container:
     name: musicbrainz
-    image: linuxserver/musicbrainz:68
+    image: linuxserver/musicbrainz
     volumes:
       - "{{ configs_dir }}/musicbrainz:/config"
       - "/var/local/musicbrainz/data:/data"
     ports:
-      - "127.0.0.1:5000:5000"
+      - "5000:5000"
     env:
       PUID={{ users.7.uid }}
       PGID=1001
@@ -242,3 +242,25 @@
       - "hydra:hydra"
     restart_policy: always
   tags: lazylibrarian
+
+- name: Couchpotato-Bot container
+  docker_container:
+    name: couchpotato-bot
+    image: subzero79/docker-telegram-couchpotato-bot
+    volumes:
+      - "{{ configs_dir }}/couchpotato-bot:/config"
+    links:
+      - "couchpotato:couchpotato"
+    restart_policy: always
+  tags: couchpotato-bot
+
+- name: Sonarr-Bot container
+  docker_container:
+    name: sonarr-bot
+    image: subzero79/docker-telegram-sonarr-bot
+    volumes:
+      - "{{ configs_dir }}/sonarr-bot:/config"
+    links:
+      - "sonarr:sonarr"
+    restart_policy: always
+  tags: sonarr-bot
