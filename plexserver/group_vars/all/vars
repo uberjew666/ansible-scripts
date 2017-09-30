@@ -1,0 +1,24 @@
+---
+
+# Default workspace
+workspace: /tmp
+# Snapraid mount directory
+mount_dir: /mnt/data
+# Mergerfs mount directory
+data_dir: /storage
+# Container config directory
+configs_dir: /opt/configs
+# Downloads directory
+download_dir: /downloads
+# Media directory
+media_dir: "{{ data_dir }}/media"
+
+
+# Snapraid variables
+snapraid_version: 11.1
+# MergerFS variables
+mergerfs_version: 2.21.0
+# Docker-compose variables
+docker_compose_version: 1.13.0
+# Container variables
+timezone: Europe/London
