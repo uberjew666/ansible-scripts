@@ -1,0 +1,5 @@
+---
+- name: Restart SNMP
+  service:
+    name: snmpd
+    state: restarted

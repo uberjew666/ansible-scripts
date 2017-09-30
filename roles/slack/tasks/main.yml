@@ -1,0 +1,8 @@
+---
+- name: Send notification message via Slack
+  slack:
+    token: "{{ slack_key }}"
+    channel: #ansible
+    color: "{{ color }}"
+    msg: "{{ slack_message }}"
+  delegate_to: localhost

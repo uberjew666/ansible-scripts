@@ -1,0 +1,54 @@
+---
+- name: Add OSSEC repo key
+  apt_key:
+    url: "http://ossec.wazuh.com/repos/apt/conf/ossec-key.gpg.key"
+    state: present
+
+- name: Add OSSEC repo
+  apt_repository:
+    repo: deb http://ossec.wazuh.com/repos/apt/{{ ansible_distribution|lower }} {{ ansible_distribution_release }} main
+    state: present
+  when: ansible_os_family == "Debian"
+
+- name: Install OSSEC agent
+  apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  with_items:
+    - ossec-hids-agent
+    - python-pexpect
+
+- name: Set Alienvault IP address
+  lineinfile:
+    path: /var/ossec/etc/ossec.conf
+    regexp: '<server-ip>'
+    line: '<server-ip>{{ alienvault_ip }}</server-ip>'
+
+- name: Remove auto-generated client keys
+  file:
+    path: /var/ossec/etc/client.keys
+    state: absent
+
+- name: Configure OSSEC agent
+  expect:
+    command: ./manage_agents
+    chdir: /var/ossec/bin
+    creates: ../etc/client.keys
+    echo: yes
+    responses:
+      "Choose your action: I or Q:":
+        - "I"
+        - "Q"
+      "Paste it here.*:": "{{ client_key }}"
+      "Confirm adding it.*:": "Y"
+      ".* Press ENTER to return to the main menu.": "\n"
+    timeout: 15
+  register: expect_output
+
+- name: Restart OSSEC agent
+  command: ./ossec-control restart
+  args:
+    chdir: /var/ossec/bin
+  register: restart_ossec
+  failed_when: "'ERROR' in restart_ossec.stderr"

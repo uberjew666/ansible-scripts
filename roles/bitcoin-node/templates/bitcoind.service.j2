@@ -1,0 +1,19 @@
+[Unit]
+Description=Bitcoin's distributed currency daemon
+After=network.target
+
+[Service]
+User={{ user }}
+Group={{ user }}
+
+Type=forking
+PIDFile=/var/lib/bitcoind/bitcoind.pid
+ExecStart=/usr/local/bin/bitcoind -daemon
+ExecStop=/usr/local/bin/bitcoin-cli stop
+
+KillMode=process
+Restart=on-failure
+TimeoutSec=120
+
+[Install]
+WantedBy=multi-user.target

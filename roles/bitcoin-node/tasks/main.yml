@@ -1,0 +1,31 @@
+---
+- name: Add Bitcoin repo
+  apt_repository:
+    repo: 'ppa:bitcoin/bitcoin'
+    state: present
+
+- name: Install Bitcoin Daemon
+  apt:
+    name: bitcoind
+    state: present
+    update_cache: yes
+
+- name: Create Bitcoind user
+  user:
+    name: "{{ user }}"
+    state: present  
+
+- name: Copy Bitcoind startup script
+  template:
+    src: bitcoind.service.j2
+    dest: /lib/systemd/system/bitcoind.service
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Reload Systemd
+  systemd:
+    name: bitcoind
+    state: started
+    enabled: yes
+    daemon_reload: yes

@@ -1,0 +1,42 @@
+---
+- name: Install prerequisities
+  apt:
+    name: apt-transport-https
+    state: present
+
+- name: Add Elastic repo key
+  apt_key:
+    url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+    state: present
+
+- name: Add Kibana repo
+  apt_repository:
+    repo: 'deb https://artifacts.elastic.co/packages/{{ kibana_version }}/apt stable main'
+    state: present
+    update_cache: yes
+
+- name: Install Kibana.
+  package:
+    name: kibana
+    state: present
+
+- name: Ensure Kibana is started and enabled at boot.
+  service:
+    name: kibana
+    state: started
+    enabled: yes
+
+- name: Copy Kibana configuration.
+  template:
+    src: kibana.yml.j2
+    dest: "/etc/kibana/kibana.yml"
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart kibana
+
+- name: Check Kibana is running
+  wait_for:
+    host: "{{ inventory_hostname }}"
+    port: 5601
+  delegate_to: localhost
