@@ -3,3 +3,19 @@ fatboy.skynet.lan
 
 [monitoring]
 syslog.skynet.lan
+
+[bitcoin-nodes]
+bitcoin.skynet.lan
+
+[raspberrypis]
+rpi1.skynet.lan
+rpi3.skynet.lan
+
+[vhosts]
+esxi.skynet.lan
+
+[vhosts:vars]
+remote_user=root
+
+[vcenter]
+vcenter.skynet.lan

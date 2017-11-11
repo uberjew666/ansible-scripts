@@ -1,0 +1,39 @@
+---
+- name:
+  hosts: vcenter
+  gather_facts: no
+  connection: local
+
+  tasks:
+    - name: Gather facts
+      local_action:
+        module: vmware_vm_facts
+        hostname: "{{ hostname }}"
+        username: "{{ user }}"
+        password: "{{ pass }}"
+
+    - name: Create Bitcoin Node VM
+      vmware_guest:
+        hostname: "{{ hostname }}"
+        username: "{{ user }}"
+        password: "{{ pass }}"
+        validate_certs: no
+        esxi_hostname: "{{ esxi_hostname }}"
+        datacenter: "{{ datacenter }}"
+        name: "Bitcoin Node"
+        state: poweredon
+        template: ubuntu14.04
+        networks:
+        - name: "{{ network }}"
+          ip: 192.168.1.22
+          netmask: 255.255.255.0
+          gateway: 192.168.1.62
+          domain: skynet.lan
+          dns_servers:
+          - 192.168.1.62
+        customization:
+          hostname: bitcoin
+        wait_for_ip_address: yes
+      register: deployment
+
+  
