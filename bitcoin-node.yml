@@ -35,5 +35,3 @@
           hostname: bitcoin
         wait_for_ip_address: yes
       register: deployment
-
-  
