@@ -5,13 +5,13 @@
     state: present
 
 - name: Add HWRaid repository
+  when: ansible_os_family == "Debian"
   apt_repository:
     repo: deb http://hwraid.le-vert.net/{{ ansible_distribution|lower }} {{ ansible_distribution_release }} main
     state: present
-  when: ansible_os_family == "Debian"
 
 - name: Install sas2ircu
   apt:
     name: sas2ircu
     state: present
-    update_cache: yes
+    update_cache: true
