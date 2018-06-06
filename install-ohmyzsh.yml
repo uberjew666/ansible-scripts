@@ -1,0 +1,29 @@
+---
+- name: Install Oh my Zsh
+  hosts: localhost
+  
+  vars:
+    ohmyzsh_theme: agnoster
+    ohmyzsh_plugins:
+      - git
+      - cp
+      - rails
+      - rails3
+      - ruby
+      - capistrano
+      - bundler
+      - heroku
+      - rake
+      - rvm
+      - autojump
+      - command-not-found
+      - python
+      - pip
+      - github
+      - gnu-utils
+      - history-substring-search
+      - zsh-syntax-highlighting
+      - docker
+
+  roles:
+    - ohmyzsh

@@ -1,0 +1,7 @@
+---
+# Theme for Oh my Zsh.
+# agnoster
+# robbyrussell
+ohmyzsh_theme: robbyrussell
+ohmyzsh_plugins:
+  - git
