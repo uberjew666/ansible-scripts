@@ -13,7 +13,6 @@ platforms:
       - SYS_ADMIN
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
-    docker_host: tcp://127.0.0.1:2375
 provisioner:
   name: ansible
   lint:
