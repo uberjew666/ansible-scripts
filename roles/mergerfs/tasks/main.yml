@@ -1,17 +1,7 @@
 ---
-- name: Download MergerFS deb package
-  get_url:
-    url: https://github.com/trapexit/mergerfs/releases/download/{{ mergerfs_version }}/mergerfs_{{ mergerfs_version }}.{{ ansible_distribution }}-{{ ansible_distribution_release }}_amd64.deb
-    dest: "{{ workspace }}/mergerfs.deb"
-
-- name: Install Mergerfs
+- name: Download and install Mergerfs
   apt:
-    deb: "{{ workspace }}/mergerfs.deb"
-
-- name: Remove the mess
-  file:
-    path: "{{ workspace }}/mergerfs.deb"
-    state: absent
+    deb: "https://github.com/trapexit/mergerfs/releases/download/{{ mergerfs_version }}/mergerfs_{{ mergerfs_version }}.{{ ansible_distribution }}-{{ ansible_distribution_release }}_amd64.deb"
 
 - name: Add MergerFS mount to fstab
   blockinfile:
