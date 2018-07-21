@@ -1,0 +1,99 @@
+---
+- name: Generate Diffie-Hellman key file (Takes a while)
+  shell: openssl dhparam -out /config/auth/dh.pem -2 {{ ubca_diffiehellman_key_size }}
+  args:
+    creates: /config/auth/dh.pem
+
+- name: Generate root certificate
+  shell: |
+    ./CA.sh -newca
+
+    expect "PEM Passphrase:"
+    send "{{ ubca_pem_passphrase }}\n"
+
+    expect "Country Name:"
+    send "{{ ubca_country_name }}\n"
+
+    expect "State Or Province Name:"
+    send "{{ ubca_state_province_name }}\n"
+
+    expect "Locality Name:"
+    send "{{ ubca_locality_name }}\n"
+
+    expect "Organization Name:"
+    send "{{ ubca_organisation_name }}\n"
+
+    expect "Organizational Unit Name:"
+    send "{{ ubca_organisation_unit_name }}\n"
+
+    expect "Common Name:"
+    send "{{ ubca_ca_common_name }}\n"
+
+    expect "Email Address:"
+    send "{{ ubca_email_address }}\n"
+  args:
+    executable: /usr/bin/expect
+    chdir: /usr/lib/ssl/misc
+    creates: demoCA/cacert.pem
+
+- name: Copy root certificate and key
+  copy:
+    src: "{{ item }}"
+    dest: /config/auth
+    owner: root
+    group: root
+    remote_src: true
+  with_items:
+    - /usr/lib/ssl/misc/demoCA/cacert.pem
+    - /usr/lib/ssl/misc/demoCA/private/cakey.pem
+
+- name: Generate router certificate
+  shell: |
+    ./CA.sh -newreg
+
+    expect "Country Name:"
+    send "{{ ubca_country_name }}\n"
+
+    expect "State Or Province Name:"
+    send "{{ ubca_state_province_name }}\n"
+
+    expect "Locality Name:"
+    send "{{ ubca_locality_name }}\n"
+
+    expect "Organization Name:"
+    send "{{ ubca_organisation_name }}\n"
+
+    expect "Organizational Unit Name:"
+    send "{{ ubca_organisation_unit_name }}\n"
+
+    expect "Common Name:"
+    send "{{ ubca_server_common_name }}\n"
+
+    expect "Email Address:"
+    send "{{ ubca_email_address }}\n"
+  args:
+    executable: /usr/bin/expect
+    chdir: /usr/lib/ssl/misc
+    creates: newcert.pem
+
+- name: Sign router certificate
+  shell: |
+    expect "Sign the certificate? [y/n]:"
+    send "y\n"
+
+    expect "1 out of 1 certificate requests certified, commit? [y/n]"
+    send "y\n"
+  args:
+    executable: /usr/bin/expect
+    chdir: /usr/lib/ssl/misc
+
+- name: Move router certficate
+  command: mv newcert.pem /config/auth/server.pem && mv newkey.pem /config/auth/server.key
+  args:
+    creates: /config/auth/server.pem
+
+- name: Cleanup
+  file:
+    path: /usr/lib/ssl/misc/demoCA
+    state: absent
+  when: ubca_cleanup is true
