@@ -1,6 +1,6 @@
 ---
 - hosts: plexservers
-  become: yes
+  become: true
 
   roles:
     - { role: sas2ircu, tags: sas2ircu }
