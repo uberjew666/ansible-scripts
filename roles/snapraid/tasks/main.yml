@@ -1,18 +1,18 @@
 ---
-- name: Add Snapraid repository
+- name: Add repository
   apt_repository:
     repo: ppa:tikhonov/snapraid
     state: present
+    update_cache: true
 
 - name: Install Snapraid
   apt:
     name: snapraid
     state: present
-    update_cache: yes
 
 - name: Configure Snapraid
   template:
-    src: snapraid.j2
+    src: snapraid.conf.j2
     dest: /etc/snapraid.conf
     owner: root
     group: root
@@ -20,32 +20,12 @@
 
 - name: Create mount folders
   file:
-    path: "{{ mount_dir }}/{{ item.name }}"
+    path: "{{ item.mount }}"
     state: directory
     mode: 0755
   with_items:
-    - "{{ disks }}"
+    - "{{ snapraid_parity_disks }}"
+    - "{{ snapraid_data_disks }}"
 
-- name: Add data disks to fstab
-  blockinfile:
-    path: /etc/fstab
-    backup: yes
-    marker: "# {mark} Snapraid Data Disks"
-    insertafter: EOF
-    block: |
-      UUID={{ disks.8.uuid }} {{ mount_dir }}/{{ disks.8.name }}     ext4    defaults        0       2
-      UUID={{ disks.9.uuid }} {{ mount_dir }}/{{ disks.9.name }}     ext4    defaults        0       2
-      UUID={{ disks.10.uuid }} {{ mount_dir }}/{{ disks.10.name }}     ext4    defaults        0       2
-      UUID={{ disks.12.uuid }} {{ mount_dir }}/{{ disks.12.name }}     ext4    defaults        0       2
-      UUID={{ disks.13.uuid }} {{ mount_dir }}/{{ disks.13.name }}     ext4    defaults        0       2
-      UUID={{ disks.14.uuid }} {{ mount_dir }}/{{ disks.14.name }}     ext4    defaults        0       2
-
-- name: Add Parity disks to fstab
-  blockinfile:
-    path: /etc/fstab
-    backup: yes
-    marker: "# {mark} Snapraid Parity Disks"
-    insertafter: EOF
-    block: |
-      UUID={{ disks.11.uuid }} {{ mount_dir }}/{{ disks.11.name }}     ext4    defaults        0       2
-      UUID={{ disks.15.uuid }} {{ mount_dir }}/{{ disks.15.name }}     ext4    defaults        0       2
+- include_tasks: fstab.yml
+  when: disks is defined
