@@ -17,7 +17,7 @@
       TZ={{ timezone }}
     restart_policy: always
   notify:
-    - Remove old Sabnzbd image
+    - Remove old images
   tags: sabnzbd
 
 - name: Transmission container
@@ -39,7 +39,7 @@
       TZ={{ timezone }}
     restart_policy: always
   notify:
-    - Remove old Transmission image
+    - Remove old images
   tags: transmission
 
 - name: Hydra container
@@ -61,7 +61,7 @@
       - "sabnzbd:sabnzbd"
     restart_policy: always
   notify:
-    - Remove old Hydra image
+    - Remove old images
   tags: hydra
 
 - name: Plex container
@@ -95,7 +95,7 @@
     network_mode: host
     restart_policy: always
   notify:
-    - Remove old Plex image
+    - Remove old images
   tags: plex
 
 - name: Sonarr container
@@ -121,7 +121,7 @@
       - "hydra:hydra"
     restart_policy: always
   notify:
-    - Remove old Sonarr image
+    - Remove old images
   tags: sonarr
 
 - name: Tautulli container
@@ -142,7 +142,7 @@
       TZ={{ timezone }}
     restart_policy: always
   notify:
-    - Remove old Tautulli image
+    - Remove old images
   tags: plexpy
 
 - name: Unifi container
@@ -165,7 +165,7 @@
       TZ={{ timezone }}
     restart_policy: always
   notify:
-    - Remove old Unifi image
+    - Remove old images
   tags: unifi
 
 - name: Radarr
@@ -190,7 +190,7 @@
       - "transmission:transmission"
     restart_policy: always
   notify:
-    - Remove old Radarr image
+    - Remove old images
   tags: radarr
 
 - name: Lidarr
@@ -214,5 +214,5 @@
       - "transmission:transmission"
     restart_policy: always
   notify:
-    - Remove old Lidarr image
+    - Remove old images
   tags: lidarr
