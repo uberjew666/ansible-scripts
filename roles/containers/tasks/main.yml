@@ -1,8 +1,10 @@
 ---
 - name: Sabnzbd container
   docker_container:
+    state: started
     name: sabnzbd
-    image: linuxserver/sabnzbd
+    image: "{{ sabnzbd_image }}"
+    pull: true
     volumes:
       - "{{ configs_dir }}/sabnzbd:/config"
       - "{{ download_dir }}:/downloads"
@@ -14,12 +16,16 @@
       PGID=1001
       TZ={{ timezone }}
     restart_policy: always
+  notify:
+    - Remove old Sabnzbd image
   tags: sabnzbd
 
 - name: Transmission container
   docker_container:
+    state: started
     name: transmission
-    image: linuxserver/transmission
+    image: "{{ transmission_image }}"
+    pull: true
     volumes:
       - "{{ configs_dir }}/transmission:/config"
       - "{{ download_dir}}:/downloads"
@@ -32,12 +38,16 @@
       PGID=1001
       TZ={{ timezone }}
     restart_policy: always
+  notify:
+    - Remove old Transmission image
   tags: transmission
 
 - name: Hydra container
   docker_container:
+    state: started
     name: hydra
-    image: linuxserver/hydra
+    image: "{{ hydra_image }}"
+    pull: true
     volumes:
       - "{{ configs_dir }}/hydra:/config"
       - "{{ download_dir }}:/downloads"
@@ -50,12 +60,16 @@
     links:
       - "sabnzbd:sabnzbd"
     restart_policy: always
+  notify:
+    - Remove old Hydra image
   tags: hydra
 
 - name: Plex container
   docker_container:
+    state: started
     name: plex
-    image: plexinc/pms-docker:plexpass
+    image: "{{ plex_image }}"
+    pull: true
     volumes:
       - "{{ configs_dir }}/plex:/config"
       - "{{ media_dir }}/Videos:/data:ro"
@@ -72,18 +86,24 @@
       - "32413:32413/udp"
       - "32414:32414/udp"
     env:
-      PLEX_CLAIM="{{ plex_claim_token }}"
+      PLEX_CLAIM="claim-MWWps1QYNDksfn2o7sBc"
       ADVERTISE_IP="http://{{ ansible_default_ipv4.address }}:32400/"
-      PUID={{ users.14.uid }}
-      PGID=1001
+      PLEX_UID=111
+      PLEX_GID=118
+      CHANGE_CONFIG_DIR_OWNERSHIP=true
       TZ={{ timezone }}
+    network_mode: host
     restart_policy: always
+  notify:
+    - Remove old Plex image
   tags: plex
 
 - name: Sonarr container
   docker_container:
+    state: started
     name: sonarr
-    image: linuxserver/sonarr
+    image: "{{ sonarr_image }}"
+    pull: true
     volumes:
       - "{{ configs_dir }}/sonarr:/config"
       - "{{ download_dir }}:/downloads"
@@ -100,73 +120,16 @@
       - "transmission:transmission"
       - "hydra:hydra"
     restart_policy: always
+  notify:
+    - Remove old Sonarr image
   tags: sonarr
 
-- name: Couchpotato container
+- name: Tautulli container
   docker_container:
-    name: couchpotato
-    image: linuxserver/couchpotato
-    volumes:
-      - "{{ configs_dir }}/couchpotato:/config"
-      - "{{ download_dir }}:/downloads"
-      - "{{ media_dir }}/Videos/Movies:/movies"
-    ports:
-      - "127.0.0.1:8925:5050"
-    env:
-      PUID={{ users.1.uid }}
-      PGID=1001
-      TZ={{ timezone }}
-    links:
-      - "sabnzbd:sabnzbd"
-      - "transmission:transmission"
-      - "hydra:hydra"
-    restart_policy: always
-  tags: couchpotato
-
-- name: Musicbrainz container
-  docker_container:
-    name: musicbrainz
-    image: linuxserver/musicbrainz
-    volumes:
-      - "{{ configs_dir }}/musicbrainz:/config"
-      - "/var/local/musicbrainz/data:/data"
-    ports:
-      - "5000:5000"
-    env:
-      PUID={{ users.7.uid }}
-      PGID=1001
-      TZ={{ timezone }}
-      BRAINZCODE={{ metabrainz_code }}
-      WEBADDRESS={{ ansible_default_ipv4.address }}
-    restart_policy: always
-  tags: musicbrainz
-
-- name: Headphones container
-  docker_container:
-    name: headphones
-    image: bytesized/headphones
-    volumes:
-      - "{{ configs_dir }}/headphones:/config"
-      - "{{ download_dir }}:/media"
-      - "{{ media_dir }}/Music:/data"
-    ports:
-      - "127.0.0.1:8181:8181"
-    env:
-      PUID={{ users.4.uid }}
-      PGID=1001
-      TZ={{ timezone }}
-    links:
-      - "sabnzbd:sabnzbd"
-      - "transmission:transmission"
-      - "hydra:hydra"
-      - "musicbrainz:musicbrainz"
-    restart_policy: always
-  tags: headphones
-
-- name: Plexpy container
-  docker_container:
-    name: plexpy
-    image: linuxserver/plexpy
+    state: started
+    name: tautulli
+    image: "{{ tautulli_image }}"
+    pull: true
     volumes:
       - "{{ configs_dir }}/plexpy:/config"
       - "/etc/localtime:/etc/localtime:ro"
@@ -177,15 +140,17 @@
       PUID={{ users.8.uid }}
       PGID=65534
       TZ={{ timezone }}
-    links:
-      - "plex:plex"
     restart_policy: always
+  notify:
+    - Remove old Tautulli image
   tags: plexpy
 
 - name: Unifi container
   docker_container:
+    state: absent
     name: unifi
-    image: linuxserver/unifi
+    image: "{{ unifi_image }}"
+    pull: true
     volumes:
       - "{{ configs_dir }}/unifi:/config"
     ports:
@@ -199,68 +164,55 @@
       PGID=65534
       TZ={{ timezone }}
     restart_policy: always
+  notify:
+    - Remove old Unifi image
   tags: unifi
 
-- name: Mylar container
+- name: Radarr
   docker_container:
-    name: mylar
-    image: linuxserver/mylar
+    state: started
+    name: radarr
+    image: "{{ radarr_image }}"
+    pull: true
     volumes:
-      - "{{ configs_dir }}/mylar:/config"
+      - "{{ configs_dir }}/radarr:/config"
       - "{{ download_dir }}:/downloads"
-      - "{{ media_dir }}/Comics:/comics"
+      - "{{ media_dir }}/Videos/Movies:/movies"
+      - "/etc/localtime:/etc/localtime:ro"
     ports:
-      - "127.0.0.1:8090:8090"
+      - "127.0.0.1:7878:7878"
     env:
-      PUID={{ users.2.uid }}
+      PUID={{ users.1.uid }}
       PGID=1001
       TZ={{ timezone }}
     links:
       - "sabnzbd:sabnzbd"
       - "transmission:transmission"
-      - "hydra:hydra"
     restart_policy: always
-  tags: mylar
+  notify:
+    - Remove old Radarr image
+  tags: radarr
 
-- name: Lazylibrarian container
+- name: Lidarr
   docker_container:
-    name: lazylibrarian
-    image: linuxserver/lazylibrarian
+    state: started
+    name: lidarr
+    image: "{{ lidarr_image }}"
+    pull: true
     volumes:
-      - "{{ configs_dir }}/lazylibrarian:/config"
+      - "{{ configs_dir }}/lidarr:/config"
       - "{{ download_dir }}:/downloads"
-      - "{{ media_dir }}/eBooks:/books"
+      - "{{ media_dir }}/Videos/Music:/music"
     ports:
-      - "127.0.0.1:5299:5299"
+      - "127.0.0.1:8686:8686"
     env:
-      PUID={{ users.9.uid }}
+      PUID={{ users.4.uid }}
       PGID=1001
       TZ={{ timezone }}
     links:
       - "sabnzbd:sabnzbd"
       - "transmission:transmission"
-      - "hydra:hydra"
     restart_policy: always
-  tags: lazylibrarian
-
-- name: Couchpotato-Bot container
-  docker_container:
-    name: couchpotato-bot
-    image: subzero79/docker-telegram-couchpotato-bot
-    volumes:
-      - "{{ configs_dir }}/couchpotato-bot:/config"
-    links:
-      - "couchpotato:couchpotato"
-    restart_policy: always
-  tags: couchpotato-bot
-
-- name: Sonarr-Bot container
-  docker_container:
-    name: sonarr-bot
-    image: subzero79/docker-telegram-sonarr-bot
-    volumes:
-      - "{{ configs_dir }}/sonarr-bot:/config"
-    links:
-      - "sonarr:sonarr"
-    restart_policy: always
-  tags: sonarr-bot
+  notify:
+    - Remove old Lidarr image
+  tags: lidarr

@@ -1,0 +1,10 @@
+---
+sabnzbd_image: linuxserver/sabnzbd
+transmission_image: linuxserver/transmission
+hydra_image: linuxserver/hydra
+plex_image: plexinc/pms-docker:plexpass
+sonarr_image: linuxserver/sonarr
+tautulli_image: linuxserver/tautulli
+unifi_image: linuxserver/unifi
+radarr_image: linuxserver/radarr
+lidarr_image: linuxserver/lidarr

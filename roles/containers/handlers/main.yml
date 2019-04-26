@@ -1,0 +1,60 @@
+---
+- name: Remove old Sabnzbd image
+  docker_image:
+    state: absent
+    name: linuxserver/sabnzbd
+    tag: none
+
+- name: Remove old Transmission image
+  docker_image:
+    state: absent
+    name: linuxserver/transmission
+    tag: none
+
+- name: Remove old Hydra image
+  docker_image:
+    state: absent
+    name: linuxserver/hydra
+    tag: none
+
+- name: Remove old Plex image
+  docker_image:
+    state: absent
+    name: plexinc/pms-docker
+    tag: none
+
+- name: Remove old Sabnzbd image
+  docker_image:
+    state: absent
+    name: linuxserver/sabnzbd
+    tag: none
+
+- name: Remove old Sonarr image
+  docker_image:
+    state: absent
+    name: linuxserver/sonarr
+    tag: none
+
+- name: Remove old Tautulli image
+  docker_image:
+    state: absent
+    name: linuxserver/tautulli
+    tag: none
+
+- name: Remove old Unifi image
+  docker_image:
+    state: absent
+    name: linuxserver/unifi
+    tag: none
+
+- name: Remove old Radarr image
+  docker_image:
+    state: absent
+    name: linuxserver/radarr
+    tag: none
+
+- name: Remove old Lidarr image
+  docker_image:
+    state: absent
+    name: linuxserver/lidarr
+    tag: none
