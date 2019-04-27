@@ -234,6 +234,6 @@
       PGID=1001
       TZ={{ timezone }}
     restart_policy: always
-    notify:
-      - Remove old images
-    tags: beets
+  notify:
+    - Remove old images
+  tags: beets
