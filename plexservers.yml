@@ -1,6 +1,7 @@
 ---
 - hosts: plexservers
   become: true
+  connection: local
 
   roles:
     - { role: sas2ircu, tags: sas2ircu }
