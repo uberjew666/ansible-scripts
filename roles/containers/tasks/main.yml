@@ -216,3 +216,24 @@
   notify:
     - Remove old images
   tags: lidarr
+
+- name: Beets
+  docker_container:
+    state: started
+    name: beets
+    image: "{{ beets_image }}"
+    pull: true
+    volumes:
+      - "{{ configs_dir }}/beets:/config"
+      - "{{ download_dir }}:/downloads"
+      - "{{ media_dir }}/Videos/Music:/music"
+    ports:
+      - "127.0.0.1:8337:8337"
+    env:
+      PUID={{ users.12.uid }}
+      PGID=1001
+      TZ={{ timezone }}
+    restart_policy: always
+    notify:
+      - Remove old images
+    tags: beets
