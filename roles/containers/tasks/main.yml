@@ -3,7 +3,7 @@
   docker_container:
     state: started
     name: sabnzbd
-    image: "{{ sabnzbd_image }}"
+    image: linuxserver/sabnzbd
     pull: true
     volumes:
       - "{{ configs_dir }}/sabnzbd:/config"
@@ -16,15 +16,13 @@
       PGID=1001
       TZ={{ timezone }}
     restart_policy: always
-  notify:
-    - Remove old images
   tags: sabnzbd
 
 - name: Transmission container
   docker_container:
     state: started
     name: transmission
-    image: "{{ transmission_image }}"
+    image: linuxserver/transmission
     pull: true
     volumes:
       - "{{ configs_dir }}/transmission:/config"
@@ -38,15 +36,13 @@
       PGID=1001
       TZ={{ timezone }}
     restart_policy: always
-  notify:
-    - Remove old images
   tags: transmission
 
 - name: Hydra container
   docker_container:
     state: started
     name: hydra
-    image: "{{ hydra_image }}"
+    image: linuxserver/hydra
     pull: true
     volumes:
       - "{{ configs_dir }}/hydra:/config"
@@ -60,8 +56,6 @@
     links:
       - "sabnzbd:sabnzbd"
     restart_policy: always
-  notify:
-    - Remove old images
   tags: hydra
 
 - name: Jackett
@@ -81,15 +75,13 @@
       TZ={{ timezone }}
       RUN_OPTS=
     restart_policy: always
-    notify:
-      - Remove old images
     tags: jackett
 
 - name: Plex container
   docker_container:
     state: started
     name: plex
-    image: "{{ plex_image }}"
+    image: plexinc/pms-docker:plexpass
     pull: true
     volumes:
       - "{{ configs_dir }}/plex:/config"
@@ -115,15 +107,13 @@
       TZ={{ timezone }}
     network_mode: host
     restart_policy: always
-  notify:
-    - Remove old images
   tags: plex
 
 - name: Sonarr container
   docker_container:
     state: started
     name: sonarr
-    image: "{{ sonarr_image }}"
+    image: linuxserver/sonarr
     pull: true
     volumes:
       - "{{ configs_dir }}/sonarr:/config"
@@ -142,15 +132,13 @@
       - "hydra:hydra"
       - "jackett:jackett"
     restart_policy: always
-  notify:
-    - Remove old images
   tags: sonarr
 
 - name: Tautulli container
   docker_container:
     state: started
     name: tautulli
-    image: "{{ tautulli_image }}"
+    image: linuxserver/tautulli
     pull: true
     volumes:
       - "{{ configs_dir }}/plexpy:/config"
@@ -163,15 +151,13 @@
       PGID=65534
       TZ={{ timezone }}
     restart_policy: always
-  notify:
-    - Remove old images
   tags: plexpy
 
 - name: Radarr
   docker_container:
     state: started
     name: radarr
-    image: "{{ radarr_image }}"
+    image: linuxserver/radarr
     pull: true
     volumes:
       - "{{ configs_dir }}/radarr:/config"
@@ -189,15 +175,13 @@
       - "transmission:transmission"
       - "jackett:jackett"
     restart_policy: always
-  notify:
-    - Remove old images
   tags: radarr
 
 - name: Lidarr
   docker_container:
     state: started
     name: lidarr
-    image: "{{ lidarr_image }}"
+    image: linuxserver/lidarr
     pull: true
     volumes:
       - "{{ configs_dir }}/lidarr:/config"
@@ -214,15 +198,13 @@
       - "transmission:transmission"
       - "jackett:jackett"
     restart_policy: always
-  notify:
-    - Remove old images
   tags: lidarr
 
 - name: Beets
   docker_container:
     state: started
     name: beets
-    image: "{{ beets_image }}"
+    image: linuxserver/beets
     pull: true
     volumes:
       - "{{ configs_dir }}/beets:/config"
@@ -235,6 +217,10 @@
       PGID=1001
       TZ={{ timezone }}
     restart_policy: always
-  notify:
-    - Remove old images
   tags: beets
+
+- name: Remove dangling images
+  docker_prune:
+    images: true
+    images_filters:
+      dangling: true
