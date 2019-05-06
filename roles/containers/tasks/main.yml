@@ -75,7 +75,7 @@
       TZ={{ timezone }}
       RUN_OPTS=
     restart_policy: always
-    tags: jackett
+  tags: jackett
 
 - name: Plex container
   docker_container:
