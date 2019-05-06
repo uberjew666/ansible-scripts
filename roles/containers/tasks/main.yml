@@ -61,7 +61,7 @@
 - name: Jackett
   docker_container:
     state: started
-    name: Jackett
+    name: jackett
     image: linuxserver/jackett
     pull: true
     volumes:
