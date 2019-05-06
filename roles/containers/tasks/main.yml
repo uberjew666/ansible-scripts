@@ -64,6 +64,27 @@
     - Remove old images
   tags: hydra
 
+- name: Jackett
+  docker_container:
+    state: started
+    name: Jackett
+    image: linuxserver/jackett
+    pull: true
+    volumes:
+      - "{{ configs_dir }}/jackett:/config"
+      - "{{ download_dir }}:/downloads"
+    ports:
+      - "127.0.0.1:9117:9117"
+    env:
+      PUID={{ users.11.uid }}
+      PGID=65534
+      TZ={{ timezone }}
+      RUN_OPTS=
+    restart_policy: always
+    notify:
+      - Remove old images
+    tags: jackett
+
 - name: Plex container
   docker_container:
     state: started
@@ -119,6 +140,7 @@
       - "sabnzbd:sabnzbd"
       - "transmission:transmission"
       - "hydra:hydra"
+      - "jackett:jackett"
     restart_policy: always
   notify:
     - Remove old images
@@ -145,29 +167,6 @@
     - Remove old images
   tags: plexpy
 
-- name: Unifi container
-  docker_container:
-    state: absent
-    name: unifi
-    image: "{{ unifi_image }}"
-    pull: true
-    volumes:
-      - "{{ configs_dir }}/unifi:/config"
-    ports:
-      - "8080:8080"
-      - "8081:8081"
-      - "8443:8443"
-      - "8843:8843"
-      - "8880:8880"
-    env:
-      PUID={{ users.12.uid }}
-      PGID=65534
-      TZ={{ timezone }}
-    restart_policy: always
-  notify:
-    - Remove old images
-  tags: unifi
-
 - name: Radarr
   docker_container:
     state: started
@@ -188,6 +187,7 @@
     links:
       - "sabnzbd:sabnzbd"
       - "transmission:transmission"
+      - "jackett:jackett"
     restart_policy: always
   notify:
     - Remove old images
@@ -212,6 +212,7 @@
     links:
       - "sabnzbd:sabnzbd"
       - "transmission:transmission"
+      - "jackett:jackett"
     restart_policy: always
   notify:
     - Remove old images
