@@ -46,12 +46,11 @@
     pull: true
     volumes:
       - "{{ configs_dir }}/hydra:/config"
-      - "{{ download_dir }}:/downloads"
     ports:
       - "127.0.0.1:5075:5075"
     env:
       PUID={{ users.11.uid }}
-      PGID=65534
+      PGID=1001
       TZ={{ timezone }}
     links:
       - "sabnzbd:sabnzbd"
@@ -66,12 +65,11 @@
     pull: true
     volumes:
       - "{{ configs_dir }}/jackett:/config"
-      - "{{ download_dir }}:/downloads"
     ports:
       - "127.0.0.1:9117:9117"
     env:
       PUID={{ users.11.uid }}
-      PGID=65534
+      PGID=1001
       TZ={{ timezone }}
       RUN_OPTS=
     restart_policy: always
