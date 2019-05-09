@@ -3,7 +3,7 @@
   docker_container:
     state: started
     name: sabnzbd
-    image: linuxserver/sabnzbd
+    image: linuxserver/sabnzbd:latest
     pull: true
     volumes:
       - "{{ configs_dir }}/sabnzbd:/config"
@@ -22,7 +22,7 @@
   docker_container:
     state: started
     name: transmission
-    image: linuxserver/transmission
+    image: linuxserver/transmission:latest
     pull: true
     volumes:
       - "{{ configs_dir }}/transmission:/config"
@@ -42,7 +42,7 @@
   docker_container:
     state: started
     name: hydra
-    image: linuxserver/hydra
+    image: linuxserver/hydra:latest
     pull: true
     volumes:
       - "{{ configs_dir }}/hydra:/config"
@@ -61,7 +61,7 @@
   docker_container:
     state: started
     name: jackett
-    image: linuxserver/jackett
+    image: linuxserver/jackett:latest
     pull: true
     volumes:
       - "{{ configs_dir }}/jackett:/config"
@@ -111,7 +111,7 @@
   docker_container:
     state: started
     name: sonarr
-    image: linuxserver/sonarr
+    image: linuxserver/sonarr:latest
     pull: true
     volumes:
       - "{{ configs_dir }}/sonarr:/config"
@@ -136,7 +136,7 @@
   docker_container:
     state: started
     name: tautulli
-    image: linuxserver/tautulli
+    image: linuxserver/tautulli:latest
     pull: true
     volumes:
       - "{{ configs_dir }}/plexpy:/config"
@@ -155,7 +155,7 @@
   docker_container:
     state: started
     name: radarr
-    image: linuxserver/radarr
+    image: linuxserver/radarr:latest
     pull: true
     volumes:
       - "{{ configs_dir }}/radarr:/config"
@@ -179,7 +179,7 @@
   docker_container:
     state: started
     name: lidarr
-    image: linuxserver/lidarr
+    image: linuxserver/lidarr:latest
     pull: true
     volumes:
       - "{{ configs_dir }}/lidarr:/config"
@@ -202,7 +202,7 @@
   docker_container:
     state: started
     name: beets
-    image: linuxserver/beets
+    image: linuxserver/beets:latest
     pull: true
     volumes:
       - "{{ configs_dir }}/beets:/config"
