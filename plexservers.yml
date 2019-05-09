@@ -15,5 +15,3 @@
     - { role: cronjobs, tags: cron }
     - { role: samba, tags: samba }
     - { role: nginx, tags: nginx }
-#    - { role: beets, tags: beets }
-#    - { role: ufw, tags: firewall }
