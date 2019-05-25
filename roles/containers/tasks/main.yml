@@ -224,7 +224,7 @@
     image: jaymoulin/google-music-uploader:1.4.1
     pull: true
     volumes:
-      - "{{ config_dir }}/gmusic:/root/oauth"
+      - "{{ configs_dir }}/gmusic:/root/oauth"
       - "{{ media_dir }}/Videos/Music/Library:/media/library"
     env:
       REMOVE=false
