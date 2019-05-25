@@ -211,6 +211,7 @@
     ports:
       - "127.0.0.1:8337:8337"
     env:
+      UMASK=2002
       PUID={{ users.12.uid }}
       PGID=1001
       TZ={{ timezone }}
