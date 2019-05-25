@@ -217,7 +217,7 @@
     restart_policy: always
   tags: beets
 
-- name: googlemusic
+- name: Google Music
   docker_container:
     state: started
     name: gmusic
@@ -230,9 +230,22 @@
       REMOVE=false
       ONESHOT=false
       UPLOADER_ID={{ ansible_default_ipv4.macaddress|upper }}
-      DEDUP_API={{ gmusic_oauth }}
+      DEDUP_API=http://gmusic-dedup
+    links:
+      - "gmusic-dedup:gmusic-dedup"
     restart_policy: always
   tags: gmusic
+
+- name: Google Music Deduplication
+  docker_container:
+    state: started
+    name: gmusic-dedup
+    image: jaymoulin/google-musicmanager-dedup-api:1.0.0
+    pull: true
+    volumes:
+      - "{{ configs_dir }}/gmusic-dedup:/app/db"
+    restart_policy: always
+  tags: dedup
 
 - name: Remove dangling images
   docker_prune:
