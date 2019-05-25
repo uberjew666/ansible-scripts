@@ -229,6 +229,7 @@
     env:
       REMOVE=false
       ONESHOT=false
+      UPLOADER_ID={{ ansible_default_ipv4.macaddress }}
       DEDUP_API={{ gmusic_oauth }}
     restart_policy: always
   tags: gmusic
