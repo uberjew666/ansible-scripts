@@ -217,6 +217,21 @@
     restart_policy: always
   tags: beets
 
+- name: googlemusic
+  docker_container:
+    state: started
+    name: gmusic
+    image: jaymoulin/google-music-uploader:1.4.1
+    pull: true
+    volumes:
+      - "{{ media_dir }}/Videos/Music/Library:/music"
+    env:
+      REMOVE=false
+      ONESHOT=false
+      DEDUP_API={{ gmusic_oauth }}
+    restart_policy: always
+  tags: gmusic
+
 - name: Remove dangling images
   docker_prune:
     images: true
