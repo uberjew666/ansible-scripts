@@ -131,7 +131,6 @@
       PLEX_GID=118
       CHANGE_CONFIG_DIR_OWNERSHIP=true
       TZ={{ timezone }}
-    network_mode: host
     restart_policy: always
   tags: plex
 
