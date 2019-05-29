@@ -119,10 +119,6 @@
       - "32412:32412/udp"
       - "32413:32413/udp"
       - "32414:32414/udp"
-    networks:
-      - name: cloudnet
-        aliases:
-          - plex
     purge_networks: true
     env:
       PLEX_CLAIM="claim-MWWps1QYNDksfn2o7sBc"
@@ -131,6 +127,7 @@
       PLEX_GID=118
       CHANGE_CONFIG_DIR_OWNERSHIP=true
       TZ={{ timezone }}
+    network_mode: host
     restart_policy: always
   tags: plex
 
