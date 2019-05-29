@@ -1,4 +1,9 @@
 ---
+- name: Create docker network
+  docker_network:
+    name: cloudnet
+    state: present
+
 - name: Sabnzbd container
   docker_container:
     state: started
@@ -11,6 +16,11 @@
       - "{{ download_dir}}/incomplete:/incomplete-downloads"
     ports:
       - "127.0.0.1:8010:8080"
+    networks:
+      - name: cloudnet
+        aliases:
+          - sabnzbd
+    purge_networks: true
     env:
       PUID={{ users.0.uid }}
       PGID=1001
@@ -31,6 +41,11 @@
     ports:
       - "127.0.0.1:9091:9091"
       - "127.0.0.1:51413:51413"
+    networks:
+      - name: cloudnet
+        aliases:
+          - transmission
+    purge_networks: true
     env:
       PUID={{ users.5.uid }}
       PGID=1001
@@ -48,12 +63,15 @@
       - "{{ configs_dir }}/hydra:/config"
     ports:
       - "127.0.0.1:5075:5075"
+    networks:
+      - name: cloudnet
+        aliases:
+          - hydra
+    purge_networks: true
     env:
       PUID={{ users.11.uid }}
       PGID=1001
       TZ={{ timezone }}
-    links:
-      - "sabnzbd:sabnzbd"
     restart_policy: always
   tags: hydra
 
@@ -67,6 +85,11 @@
       - "{{ configs_dir }}/jackett:/config"
     ports:
       - "127.0.0.1:9117:9117"
+    networks:
+      - name: cloudnet
+        aliases:
+          - jackett
+    purge_networks: true
     env:
       PUID={{ users.11.uid }}
       PGID=1001
@@ -96,6 +119,11 @@
       - "32412:32412/udp"
       - "32413:32413/udp"
       - "32414:32414/udp"
+    networks:
+      - name: cloudnet
+        aliases:
+          - plex
+    purge_networks: true
     env:
       PLEX_CLAIM="claim-MWWps1QYNDksfn2o7sBc"
       ADVERTISE_IP="http://{{ ansible_default_ipv4.address }}:32400/"
@@ -120,15 +148,15 @@
       - "/dev/rtc:/rtc:ro"
     ports:
       - "127.0.0.1:8989:8989"
+    networks:
+      - name: cloudnet
+        aliases:
+          - sonarr
+    purge_networks: true
     env:
       PUID={{ users.3.uid }}
       PGID=1001
       TZ={{ timezone }}
-    links:
-      - "sabnzbd:sabnzbd"
-      - "transmission:transmission"
-      - "hydra:hydra"
-      - "jackett:jackett"
     restart_policy: always
   tags: sonarr
 
@@ -144,6 +172,11 @@
       - "{{ configs_dir}}/plex/Library/Application\ Support/Plex\ Media\ Server/Logs:/logs:ro"
     ports:
       - "127.0.0.1:8283:8181"
+    networks:
+      - name: cloudnet
+        aliases:
+          - tautulli
+    purge_networks: true
     env:
       PUID={{ users.8.uid }}
       PGID=65534
@@ -164,14 +197,15 @@
       - "/etc/localtime:/etc/localtime:ro"
     ports:
       - "127.0.0.1:7878:7878"
+    networks:
+      - name: cloudnet
+        aliases:
+          - radarr
+    purge_networks: true
     env:
       PUID={{ users.1.uid }}
       PGID=1001
       TZ={{ timezone }}
-    links:
-      - "sabnzbd:sabnzbd"
-      - "transmission:transmission"
-      - "jackett:jackett"
     restart_policy: always
   tags: radarr
 
@@ -187,14 +221,15 @@
       - "{{ media_dir }}/Videos/Music:/music"
     ports:
       - "127.0.0.1:8686:8686"
+    networks:
+      - name: cloudnet
+        aliases:
+          - lidarr
+    purge_networks: true
     env:
       PUID={{ users.4.uid }}
       PGID=1001
       TZ={{ timezone }}
-    links:
-      - "sabnzbd:sabnzbd"
-      - "transmission:transmission"
-      - "jackett:jackett"
     restart_policy: always
   tags: lidarr
 
@@ -210,6 +245,11 @@
       - "{{ media_dir }}/Videos/Music:/music"
     ports:
       - "127.0.0.1:8337:8337"
+    networks:
+      - name: cloudnet
+        aliases:
+          - beets
+    purge_networks: true
     env:
       UMASK=2002
       PUID={{ users.12.uid }}
@@ -226,6 +266,11 @@
     pull: true
     volumes:
       - "{{ configs_dir }}/gmusic-dedup:/app/db"
+    networks:
+      - name: cloudnet
+        aliases:
+          - gmusic-dedup
+    purge_networks: true
     restart_policy: always
   tags: dedup
 
@@ -238,13 +283,16 @@
     volumes:
       - "{{ configs_dir }}/gmusic:/root/oauth"
       - "{{ media_dir }}/Videos/Music/Library:/media/library"
+    networks:
+      - name: cloudnet
+        aliases:
+          - gmusic
+    purge_networks: true
     env:
       REMOVE=false
       ONESHOT=false
       UPLOADER_ID={{ ansible_default_ipv4.macaddress|upper }}
       DEDUP_API=http://gmusic-dedup
-    links:
-      - "gmusic-dedup:gmusic-dedup"
     restart_policy: always
   tags: gmusic
 
