@@ -4,12 +4,6 @@
     name: cloudnet
     state: present
 
-- name: Create plex network
-  docker_network:
-    name: plexnet
-    state: present
-    driver: host
-
 - name: Sabnzbd container
   docker_container:
     state: started
@@ -125,11 +119,6 @@
       - "32412:32412/udp"
       - "32413:32413/udp"
       - "32414:32414/udp"
-    networks:
-      - name: plexnet
-        aliases:
-          - plex
-    purge_networks: true
     env:
       PLEX_CLAIM="claim-MWWps1QYNDksfn2o7sBc"
       ADVERTISE_IP="http://{{ ansible_default_ipv4.address }}:32400/"
@@ -138,6 +127,7 @@
       CHANGE_CONFIG_DIR_OWNERSHIP=true
       TZ={{ timezone }}
     restart_policy: always
+    network_mode: host
   tags: plex
 
 - name: Sonarr container
