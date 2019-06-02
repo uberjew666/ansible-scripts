@@ -4,6 +4,12 @@
     name: cloudnet
     state: present
 
+- name: Create plex network
+  docker_network:
+    name: plexnet
+    state: present
+    driver: host
+
 - name: Sabnzbd container
   docker_container:
     state: started
@@ -108,6 +114,22 @@
       - "{{ configs_dir }}/plex:/config"
       - "{{ media_dir }}/Videos:/data:ro"
       - "/home/transcode:/transcode"
+    ports:
+      - "32469:32469"	
+      - "32400:32400"	
+      - "32401:32401"	
+      - "3005:3005"	
+      - "8324:8324"	
+      - "1900:1900/udp"	
+      - "32410:32410/udp"	
+      - "32412:32412/udp"	
+      - "32413:32413/udp"	
+      - "32414:32414/udp"	
+    networks:
+      - name: plexnet
+        aliases:
+          - plex
+    purge_networks: true
     env:
       PLEX_CLAIM="claim-MWWps1QYNDksfn2o7sBc"
       ADVERTISE_IP="http://{{ ansible_default_ipv4.address }}:32400/"
@@ -115,7 +137,6 @@
       PLEX_GID=118
       CHANGE_CONFIG_DIR_OWNERSHIP=true
       TZ={{ timezone }}
-    network_mode: host
     restart_policy: always
   tags: plex
 
