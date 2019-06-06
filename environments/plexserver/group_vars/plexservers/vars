@@ -12,7 +12,8 @@ configs_dir: /opt/configs
 download_dir: /downloads
 # Media directory
 media_dir: "{{ data_dir }}/media"
-
+# Music directory
+music_dir: "{{ media_dir }}/Videos/Music/"
 
 # Snapraid variables
 snapraid_version: 11.1
