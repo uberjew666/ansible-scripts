@@ -1,7 +1,17 @@
 ---
-- name: another cronjob
+- name: Enable trim
   cron:
     name: enable trim
     special_time: hourly
     job: "sbin/fstrim --all || true"
     cron_file: /etc/cron.hourly/trim
+
+- name: Setup cronjobs
+  cron:
+    state: present
+    name: "{{ item.name }}"
+    minute: "{{ 59 | random }}"
+    hour: "{{ 23 | random }}"
+    weekday: "{{ 6 | random }}"
+    job: '/usr/local/bin/youtube-dl --extract-audio --audio-format mp3 {{ item.url }} --output {{ item.directory }}'
+  loop: "{{ cronjobs }}"
