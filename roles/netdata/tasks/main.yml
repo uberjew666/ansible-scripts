@@ -39,9 +39,9 @@
     mode: 0660
   notify: Restart Netdata
 
-- name: create cronjobs
+- name: Add auto updater to cron
   cron:
     name: set netdata updater
     minute: 0
     hour: 6
-    job: "/opt/netdata/netdata-updater.sh"
+    job: "/opt/netdata/netdata-installer.sh --auto-update"
