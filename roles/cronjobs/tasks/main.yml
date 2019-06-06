@@ -3,9 +3,7 @@
   cron:
     state: present
     name: "{{ item.name }}"
-    user: root
-    minute: "{{ 59 | random }}"
-    hour: "{{ 23 | random }}"
-    weekday: "{{ 6 | random }}"
-    job: "/usr/local/bin/youtube-dl --extract-audio --audio-format mp3 {{ item.url }} --output {{ music_dir }}/Unsorted/{{ item.directory }}/%(title)s.%(ext)s"
+    user: simon
+    special_time: weekly
+    job: "/usr/local/bin/youtube-dl --extract-audio --audio-format mp3 {{ item.url }} --output '{{ music_dir }}/Unsorted/{{ item.directory }}/%(title)s.%(ext)s'"
   loop: "{{ cronjobs }}"
