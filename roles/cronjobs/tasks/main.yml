@@ -1,11 +1,4 @@
 ---
-- name: Enable trim
-  cron:
-    name: enable trim
-    special_time: hourly
-    job: "sbin/fstrim --all || true"
-    cron_file: /etc/cron.hourly/trim
-
 - name: Setup cronjobs
   cron:
     state: present
