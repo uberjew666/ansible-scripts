@@ -7,5 +7,5 @@
     minute: "{{ 59 | random }}"
     hour: "{{ 23 | random }}"
     weekday: "{{ 6 | random }}"
-    job: '/usr/local/bin/youtube-dl --extract-audio --audio-format mp3 {{ item.url }} --output {{ music_dir }}/Unsorted/{{ item.directory }}'
+    job: "/usr/local/bin/youtube-dl --extract-audio --audio-format mp3 {{ item.url }} --output {{ music_dir }}/Unsorted/{{ item.directory }}/%(title)s.%(ext)s"
   loop: "{{ cronjobs }}"
