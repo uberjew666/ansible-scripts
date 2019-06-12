@@ -1,0 +1,8 @@
+---
+- name: Downloads Bandcamp albums
+  shell: "bandcamp-dl --base-dir=/downloads/music --embed-art {{ item }}"
+  args:
+    creates: "/downloads/music/{{ item.split('/')[2].split('.')[0] }}/{{ item.split('/')[4] }}/"
+  loop: "{{ bandcamp_urls }}"
+  tags: bandcamp-dl
+  become: false
