@@ -16,3 +16,4 @@
     - { role: samba, tags: samba }
     - { role: nginx, tags: nginx }
     - { role: cronjobs, tags: cronjobs }
+    - { role: bandcamp, tags: bandcamp }
