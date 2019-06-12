@@ -277,7 +277,6 @@
     pull: true
     volumes:
       - "{{ configs_dir }}/gmusic:/root/oauth"
-      - "{{ media_dir }}/Videos/Music/Library:/media/library"
     networks:
       - name: cloudnet
         aliases:
@@ -287,7 +286,6 @@
       REMOVE=false
       ONESHOT=false
       UPLOADER_ID={{ ansible_default_ipv4.macaddress|upper }}
-      DEDUP_API=http://gmusic-dedup
     restart_policy: always
   tags: gmusic
 
