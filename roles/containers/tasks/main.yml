@@ -102,7 +102,7 @@
   docker_container:
     state: started
     name: plex
-    image: plexinc/pms-docker:plexpass
+    image: linuxserver/plex:latest
     pull: true
     volumes:
       - "{{ configs_dir }}/plex:/config"
@@ -120,12 +120,10 @@
       - "32413:32413/udp"
       - "32414:32414/udp"
     env:
-      PLEX_CLAIM="claim-MWWps1QYNDksfn2o7sBc"
-      ADVERTISE_IP="http://{{ ansible_default_ipv4.address }}:32400/"
-      PLEX_UID=111
-      PLEX_GID=118
-      CHANGE_CONFIG_DIR_OWNERSHIP=true
+      PUID=111
+      PGID=118
       TZ={{ timezone }}
+      VERSION=1.16.2.1297-4b7ace214
     restart_policy: always
     network_mode: host
   tags: plex
