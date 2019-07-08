@@ -126,6 +126,8 @@
       VERSION=1.16.2.1297-4b7ace214
     restart_policy: always
     network_mode: host
+    devices:
+      - /dev/dri:/dev/dir
   tags: plex
 
 - name: Sonarr container
