@@ -127,7 +127,7 @@
     restart_policy: always
     network_mode: host
     devices:
-      - /dev/dri:/dev/dir
+      - /dev/dri:/dev/dri
   tags: plex
 
 - name: Sonarr container
