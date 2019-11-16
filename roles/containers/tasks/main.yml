@@ -16,6 +16,7 @@
       - "{{ download_dir}}/incomplete:/incomplete-downloads"
     ports:
       - "127.0.0.1:8010:8080"
+      - "127.0.0.1:9090:9090"
     networks:
       - name: cloudnet
         aliases:
