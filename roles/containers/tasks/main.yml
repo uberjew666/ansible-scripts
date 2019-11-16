@@ -26,6 +26,9 @@
       PGID=1001
       TZ={{ timezone }}
     restart_policy: always
+    healthcheck:
+      test: "curl --fail --head --silent http://localhost:8080/sabnzbd/ || exit 1"
+      interval: 10s
   tags: sabnzbd
 
 - name: Transmission container
@@ -51,6 +54,10 @@
       PGID=1001
       TZ={{ timezone }}
     restart_policy: always
+    healthcheck:
+      start_period: 2s
+      test: "curl --fail --head --silent http://localhost:9091/transmission || exit 1"
+      interval: 10s
   tags: transmission
 
 - name: Hydra container
@@ -73,6 +80,10 @@
       PGID=1001
       TZ={{ timezone }}
     restart_policy: always
+    healthcheck:
+      start_period: 2s
+      test: "curl --fail --head --silent http://localhost:5075/hydra/ || exit 1"
+      interval: 10s
   tags: hydra
 
 - name: Jackett
@@ -96,6 +107,10 @@
       TZ={{ timezone }}
       RUN_OPTS=
     restart_policy: always
+    healthcheck:
+      start_period: 2s
+      test: "curl --fail --head --silent http://localhost:9117/jackett/ || exit 1"
+      interval: 10s
   tags: jackett
 
 - name: Plex container
@@ -128,6 +143,10 @@
     network_mode: host
     devices:
       - /dev/dri:/dev/dri
+    healthcheck:
+      start_period: 2s
+      test: "curl --fail --head --silent http://localhost:32400/web/index.html || exit 1"
+      interval: 10s
   tags: plex
 
 - name: Sonarr container
@@ -153,6 +172,10 @@
       PGID=1001
       TZ={{ timezone }}
     restart_policy: always
+    healthcheck:
+      start_period: 2s
+      test: "curl --fail --head --silent http://localhost:8989/tv/ || exit 1"
+      interval: 10s
   tags: sonarr
 
 - name: Tautulli container
@@ -177,6 +200,10 @@
       PGID=65534
       TZ={{ timezone }}
     restart_policy: always
+    healthcheck:
+      start_period: 2s
+      test: "curl --fail --head --silent http://localhost:8181/plexpy/home || exit 1"
+      interval: 10s
   tags: plexpy
 
 - name: Radarr
@@ -202,6 +229,10 @@
       PGID=1001
       TZ={{ timezone }}
     restart_policy: always
+    healthcheck:
+      start_period: 2s
+      test: "curl --fail --head --silent http://localhost:7878/movies/ || exit 1"
+      interval: 10s
   tags: radarr
 
 - name: Lidarr
@@ -226,6 +257,10 @@
       PGID=1001
       TZ={{ timezone }}
     restart_policy: always
+    healthcheck:
+      start_period: 2s
+      test: "curl --fail --head --silent http://localhost:8686/music/ || exit 1"
+      interval: 10s
   tags: lidarr
 
 - name: Beets
@@ -251,6 +286,10 @@
       PGID=1001
       TZ={{ timezone }}
     restart_policy: always
+    healthcheck:
+      start_period: 2s
+      test: "curl --fail --head --silent http://localhost:8337/ || exit 1"
+      interval: 10s
   tags: beets
 
 - name: Google Music Deduplication
