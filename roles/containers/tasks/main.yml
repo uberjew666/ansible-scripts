@@ -294,7 +294,7 @@
 
 - name: Google Music Deduplication
   docker_container:
-    state: started
+    state: absent
     name: gmusic-dedup
     image: jaymoulin/google-musicmanager-dedup-api:1.0.0
     pull: true
