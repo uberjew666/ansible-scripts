@@ -333,4 +333,5 @@
     images: true
     images_filters:
       dangling: true
+    timeout: 180
   tags: prune
