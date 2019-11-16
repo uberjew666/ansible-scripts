@@ -333,3 +333,4 @@
     images: true
     images_filters:
       dangling: true
+  tags: prune
