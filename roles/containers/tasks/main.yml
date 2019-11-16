@@ -310,7 +310,7 @@
 
 - name: Google Music
   docker_container:
-    state: started
+    state: stopped
     name: gmusic
     image: jaymoulin/google-music-uploader:1.4.1
     pull: true
