@@ -20,7 +20,7 @@
       - name: cloudnet
         aliases:
           - sabnzbd
-    purge_networks: true
+    networks_cli_compatible: true
     env:
       PUID={{ users.0.uid }}
       PGID=1001
@@ -48,7 +48,7 @@
       - name: cloudnet
         aliases:
           - transmission
-    purge_networks: true
+    networks_cli_compatible: true
     env:
       PUID={{ users.5.uid }}
       PGID=1001
@@ -74,7 +74,7 @@
       - name: cloudnet
         aliases:
           - hydra
-    purge_networks: true
+    networks_cli_compatible: true
     env:
       PUID={{ users.11.uid }}
       PGID=1001
@@ -100,7 +100,7 @@
       - name: cloudnet
         aliases:
           - jackett
-    purge_networks: true
+    networks_cli_compatible: true
     env:
       PUID={{ users.11.uid }}
       PGID=1001
@@ -166,7 +166,7 @@
       - name: cloudnet
         aliases:
           - sonarr
-    purge_networks: true
+    networks_cli_compatible: true
     env:
       PUID={{ users.3.uid }}
       PGID=1001
@@ -194,7 +194,7 @@
       - name: cloudnet
         aliases:
           - tautulli
-    purge_networks: true
+    networks_cli_compatible: true
     env:
       PUID={{ users.8.uid }}
       PGID=65534
@@ -223,7 +223,7 @@
       - name: cloudnet
         aliases:
           - radarr
-    purge_networks: true
+    networks_cli_compatible: true
     env:
       PUID={{ users.1.uid }}
       PGID=1001
@@ -251,7 +251,7 @@
       - name: cloudnet
         aliases:
           - lidarr
-    purge_networks: true
+    networks_cli_compatible: true
     env:
       PUID={{ users.4.uid }}
       PGID=1001
@@ -279,7 +279,7 @@
       - name: cloudnet
         aliases:
           - beets
-    purge_networks: true
+    networks_cli_compatible: true
     env:
       UMASK=2002
       PUID={{ users.12.uid }}
@@ -304,7 +304,7 @@
       - name: cloudnet
         aliases:
           - gmusic-dedup
-    purge_networks: true
+    networks_cli_compatible: true
     restart_policy: always
   tags: dedup
 
@@ -320,7 +320,7 @@
       - name: cloudnet
         aliases:
           - gmusic
-    purge_networks: true
+    networks_cli_compatible: true
     env:
       REMOVE=false
       ONESHOT=false
