@@ -1,4 +1,10 @@
 ---
+- name: Install smartmontools
+  apt:
+    name: smartmontools
+    state: present
+    force: yes
+
 - name: Create disks mounts
   file:
     path: "{{ item.value.mount }}"
