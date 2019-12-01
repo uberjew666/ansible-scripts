@@ -1,14 +1,26 @@
 ---
-- name: Add repository
+- name: Create disks mounts
+  file:
+    path: "{{ item.value.mount }}"
+    state: directory
+    mode: 0755
+    owner: root
+    group: root
+  loop: "{{ snapraid.disks|dict2items }}"
+  loop_control:
+    label: "{{ item.value.mount }}"
+
+- name: Add Snapraid repository
   apt_repository:
     repo: ppa:tikhonov/snapraid
     state: present
-    update_cache: true
+    update_cache: yes
 
 - name: Install Snapraid
   apt:
     name: snapraid
     state: present
+    force: yes
 
 - name: Configure Snapraid
   template:
@@ -17,15 +29,3 @@
     owner: root
     group: root
     mode: 0640
-
-- name: Create mount folders
-  file:
-    path: "{{ item.mount }}"
-    state: directory
-    mode: 0755
-  with_items:
-    - "{{ snapraid_parity_disks }}"
-    - "{{ snapraid_data_disks }}"
-
-- include_tasks: fstab.yml
-  when: disks is defined

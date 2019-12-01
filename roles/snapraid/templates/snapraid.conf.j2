@@ -1,10 +1,16 @@
+# Managed by Ansible
+
 # Defines the file to use as parity storage
 # It must NOT be in a data disk
 # Format: "parity FILE [,FILE] ..."
-{% for disk in snapraid_parity_disks %}
-{% if loop.first %}parity {{ disk.mount }}/snapraid.parity
-{% else %}
-{{ loop.index }}-parity {{ disk.mount }}/snapraid.{{ loop.index }}-parity
+{% for int in snapraid.disks|sort %}
+{% set _int = snapraid.disks[int] %}
+{% if _int['type']|lower == 'parity' %}
+{% set count = ( count | default(0) ) + 1 %}
+{% if count == 1 %}parity {{ _int['mount'] }}/snapraid.parity
+{% elif count < 7 %}
+{{ count }}-parity {{ _int['mount'] }}/snapraid.{{ count }}-parity
+{% endif %}
 {% endif %}
 {% endfor %}
 
@@ -15,8 +21,11 @@
 # but each file must be in a different disk
 # Format: "content FILE"
 content /var/snapraid.content
-{% for disk in snapraid_content_disks %}
-content {{ disk }}/snapraid.content
+{% for int in snapraid.disks|sort %}
+{% set _int = snapraid.disks[int] %}
+{% if _int['content'] %}
+content {{ _int['mount'] }}/snapraid.content
+{% endif %}
 {% endfor %}
 
 # Defines the data disks to use
@@ -24,12 +33,15 @@ content {{ disk }}/snapraid.content
 # WARNING: Adding here your /home, /var or /tmp disks is NOT a good idea!
 # SnapRAID is better suited for files that rarely changes!
 # Format: "data DISK_NAME DISK_MOUNT_POINT"
-{% for disk in snapraid_data_disks %}
-data {{ disk.name }} {{ disk.mount }}/
+{% for int in snapraid.disks|sort %}
+{% set _int = snapraid.disks[int] %}
+{% if _int['type']|lower == 'data' %}
+data {{ int }} {{ _int['mount'] }}/
+{% endif %}
 {% endfor %}
 
 # Excludes hidden files and directories (uncomment to enable).
-{% if snapraid_exclude_hidden_files %}
+{% if snapraid.exclude_hidden_files %}
 nohidden
 {% else %}
 #nohidden
@@ -41,7 +53,7 @@ nohidden
 # Format: "exclude DIR/"
 # Format: "exclude /PATH/FILE"
 # Format: "exclude /PATH/DIR/"
-{% for file in snapraid_exclude_files %}
+{% for file in snapraid.exclude_files %}
 exclude {{ file }}
 {% endfor %}
 
@@ -49,8 +61,8 @@ exclude {{ file }}
 # WARNING: Changing this value is for experts only!
 # Default value is 256 -> 256 kibi bytes -> 262144 bytes
 # Format: "blocksize SIZE_IN_KiB"
-{% if snapraid_blocksize is defined %}
-blocksize {{ snapraid_blocksize }}
+{% if snapraid.blocksize is defined %}
+blocksize {{ snapraid.blocksize }}
 {% else %}
 #blocksize 256
 {% endif %}
@@ -59,9 +71,9 @@ blocksize {{ snapraid_blocksize }}
 # WARNING: Changing this value is for experts only!
 # Default value is 16 -> 128 bits
 # Format: "hashsize SIZE_IN_BYTES"
-{%if snapraid_hashsize is defined %}
-hashsize {{ snapraid_hashsize }}
-{%else %}
+{%if snapraid.hashsize is defined %}
+hashsize {{ snapraid.hashsize }}
+{% else %}
 #hashsize 16
 {% endif %}
 
@@ -72,8 +84,8 @@ hashsize {{ snapraid_hashsize }}
 # It also improves the recovering if a disk break during a 'sync'.
 # Default value is 0, meaning disabled.
 # Format: "autosave SIZE_IN_GB"
-{% if snapraid_autosave is defined %}
-autosave {{ snapraid_autosave }}
+{% if snapraid.autosave is defined %}
+autosave {{ snapraid.autosave }}
 {% else %}
 #autosave 500
 {% endif %}
@@ -84,8 +96,20 @@ autosave {{ snapraid_autosave }}
 # symbolic links.
 # This directory must be outside the array.
 # Format: "pool DIR"
-{% if snapraid_pool is defined %}
-pool {{ snapraid_pool }}
+{% if snapraid.pool is defined %}
+pool {{ snapraid.pool }}
 {% else %}
 #pool /pool
 {% endif %}
+
+# Defines a custom smartctl command to obtain the SMART attributes
+# for each disk. This may be required for RAID controllers and for
+# some USB disk that cannot be autodetected.
+# In the specified options, the "%s" string is replaced by the device name.
+# Refers at the smartmontools documentation about the possible options:
+# RAID -> https://www.smartmontools.org/wiki/Supported_RAID-Controllers
+# USB -> https://www.smartmontools.org/wiki/Supported_USB-Devices
+#smartctl d1 -d sat %s
+#smartctl d2 -d usbjmicron %s
+#smartctl parity -d areca,1/1 /dev/sg0
+#smartctl 2-parity -d areca,2/1 /dev/sg0

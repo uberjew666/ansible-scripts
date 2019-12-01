@@ -1,20 +1,24 @@
 ---
-# Maximum of 6 disks
-snapraid_parity_disks:
-  - name: p1
-    mount: /mnt/diskp
-snapraid_content_disks:
-  - /mnt/disk1
-  - /mnt/disk2
-snapraid_data_disks:
-  - name: d1
-    mount: /mnt/disk1
-  - name: d2
-    mount: /mnt/disk2
-  - name: d3
-    mount: /mnt/disk3
-snapraid_exclude_hidden_files: false
-snapraid_exclude_files:
-  - "*.unrecoverable"
-  - /tmp/
-  - /lost+found/
+snapraid:
+  disks:
+    parity-01:
+      type: parity
+      mount: /mnt/diskp
+      content: false
+    data-01:
+      type: data
+      mount: /mnt/disk1
+      content: true
+    data-02:
+      type: data
+      mount: /mnt/disk2
+      content: true
+    data-03:
+      type: data
+      mount: /mnt/disk3
+      content: false
+  exclude_hidden_files: false
+  exclude_files:
+    - "*.unrecoverable"
+    - /tmp/
+    - /lost+found/
