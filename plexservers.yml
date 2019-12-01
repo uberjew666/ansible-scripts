@@ -4,12 +4,12 @@
   connection: local
 
   roles:
+    - { role: common, tags: common }
     - { role: sas2ircu, tags: sas2ircu }
     - { role: snapraid, tags: snapraid }
     - { role: mergerfs, tags: mergerfs }
     - { role: users, tags: users }
     - { role: docker, tags: docker }
-    - { role: docker-compose, tags: compose }
     - { role: containers, tags: containers }
     - { role: netdata, tags: netdata }
     - { role: cronjobs, tags: cron }
