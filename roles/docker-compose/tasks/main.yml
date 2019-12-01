@@ -1,12 +1,19 @@
 ---
-- name: install docker-compose binary
-  when: install_docker|succeeded
+- name: Get latest Compose version
+  shell: curl -s https://api.github.com/repos/docker/compose/releases/latest | jq -r ".tag_name"
+  args:
+    executable: /bin/bash
+  changed_when: false
+  register: compose_version
+  ignore_errors: yes
+
+- name: Install Compose
   get_url:
-    url: "https://github.com/docker/compose/releases/download/{{ docker_compose_version }}/docker-compose-{{ ansible_system }}-{{ ansible_architecture }}"
+    url: "https://github.com/docker/compose/releases/download/{{ compose_version.stdout }}/docker-compose-{{ ansible_system }}-{{ ansible_architecture }}"
     dest: /usr/local/bin/docker-compose
     mode: 0755
-
-- name: install docker-py
-  pip:
-    name: docker-py
-    state: present
+    owner: root
+    group: root
+    force: yes
+    validate_certs: no
+  ignore_errors: yes
