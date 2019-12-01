@@ -1,25 +1,86 @@
 ---
+system:
+  timezone: Europe/London
+snapraid:
+  version: 11.1
+  disks:
+    data-05:
+      type: data
+      mount: /mnt/disk05
+      content: true
+      uuid: dd4bff34-22f3-45c8-8870-139486b33818
+    data-06:
+      type: data
+      mount: /mnt/disk06
+      content: true
+      uuid: 0df52f8f-0356-4fa8-88fd-aaed3edfaf90
+    data-07:
+      type: data
+      mount: /mnt/disk07
+      content: true
+      uuid: 5ce7e82c-89f4-4671-b859-c9d7ffe7d40c
+    data-08:
+      type: data
+      mount: /mnt/disk08
+      content: true
+      uuid: 568573e6-f004-483a-9967-ea14085d80ea
+    data-09:
+      type: data
+      mount: /mnt/disk09
+      content: true
+      uuid: 90440fb9-d7b3-4cf5-998b-692f2c791c12
+    data-10:
+      type: data
+      mount: /mnt/disk10
+      content: true
+      uuid: 9f042d39-5e8a-48bd-8e32-22b939bb2f0d
+    data-11:
+      type: data
+      mount: /mnt/disk11
+      content: true
+      uuid: 3de14af2-166e-4265-acac-031d526621fd
+    parity-12:
+      type: parity
+      mount: /mnt/disk12
+      content: false
+      uuid: 85caae8e-390a-4ce7-a32e-e8504685f47e
+    data-13:
+      type: data
+      mount: /mnt/disk13
+      content: true
+      uuid: 35213006-d0fb-4b4a-b667-913372f11434
+    data-14:
+      type: data
+      mount: /mnt/disk14
+      content: true
+      uuid: f834525b-ecfb-490b-9fd8-bb4f6325fc66
+    data-15:
+      type: data
+      mount: /mnt/disk15
+      content: true
+      uuid: a1ba3ba9-0c79-4e47-b530-7d9357cd08c8
+    parity-16:
+      type: parity
+      mount: /mnt/disk16
+      content: false
+      uuid: edd9d8b3-7823-4ea7-8760-9182e2529ad0
+  exclude_hidden_files: false
+  exclude_files:
+    - "*.unrecoverable"
+    - /tmp/
+    - /lost+found/
+  blocksize: 256
+mergerfs:
+  version: 2.21.0
+docker:
+  repo: stable
+compose:
+  version: 1.13.0
 
-# Default workspace
 workspace: /tmp
-# Snapraid mount directory
 mount_dir: /mnt/data
-# Mergerfs mount directory
 data_dir: /storage
-# Container config directory
 configs_dir: /opt/configs
-# Downloads directory
 download_dir: /downloads
-# Media directory
 media_dir: "{{ data_dir }}/media"
-# Music directory
 music_dir: "{{ media_dir }}/Videos/Music"
-
-# Snapraid variables
-snapraid_version: 11.1
-# MergerFS variables
-mergerfs_version: 2.21.0
-# Docker-compose variables
-docker_compose_version: 1.13.0
-# Container variables
-timezone: Europe/London
