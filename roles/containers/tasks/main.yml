@@ -124,6 +124,7 @@
       - "{{ configs_dir }}/plex:/config"
       - "{{ media_dir }}/Videos:/data:ro"
       - "/home/transcode:/transcode"
+      - "/tmp:/tmp"
     env:
       PUID=111
       PGID=118
