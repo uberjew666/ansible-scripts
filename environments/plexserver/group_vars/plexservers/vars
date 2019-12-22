@@ -1,6 +1,8 @@
 ---
 system:
   timezone: Europe/London
+  hostname: fatboy
+
 snapraid:
   version: 11.1
   disks:
@@ -70,12 +72,49 @@ snapraid:
     - /tmp/
     - /lost+found/
   blocksize: 256
+
+# Snapraid-runner
+runner_snapraid_exe: /usr/bin/snapraid
+runner_config_path: /etc/snapraid.conf
+runner_delete_threshold: 50
+runner_touch_enabled: true
+runner_log_file: /var/log/snapraid.log
+runner_log_maxsize: 5000
+runner_send_conditions:
+  - 'success'
+  - 'error'
+runner_scrub_enabled: true
+runner_scrub_percentage: 15
+runner_scrub_older_than: 10
+
 mergerfs:
-  version: 2.21.0
+  source_mounts:
+    - /mnt/disk05
+    - /mnt/disk06
+    - /mnt/disk07
+    - /mnt/disk08
+    - /mnt/disk09
+    - /mnt/disk10
+    - /mnt/disk11
+    - /mnt/disk13
+    - /mnt/disk14
+    - /mnt/disk15
+  pool_mount: /storage
+  opts:
+    - 'category.create=eplfs'
+    - 'moveonenospc=true'
+    - defaults
+    - allow_other
+    - 'minfreespace=20G'
+    - 'fsname=StoragePool'
+
 docker:
   repo: stable
 compose:
   version: 1.13.0
+
+sas2ircu:
+  version: latest
 
 workspace: /tmp
 mount_dir: /mnt/data
