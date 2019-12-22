@@ -1,0 +1,23 @@
+---
+- name: Install dependencies
+  apt:
+    name: git
+    state: present
+
+- name: Clone Snapraid-runner
+  git:
+    repo: 'https://github.com/uberjew666/snapraid-runner.git'
+    dest: /opt/snapraid-runner
+
+- name: Configure Snapraid-runner
+  template:
+    src: snapraid-runner.conf.j2
+    dest: /opt/snapraid-runner/snapraid-runner.conf
+
+- name: Add Runner cronjob
+  cron:
+    name: 'check snapraid health'
+    minute: '0'
+    hour: '1'
+    job: '/opt/snapraid-runner/snapraid-runner.py >/dev/null 2>&1'
+    user: root

@@ -1,0 +1,24 @@
+---
+runner_snapraid_exe: snapraid
+runner_config_path: snapraid.conf
+runner_delete_threshold: 40
+runner_touch_enabled: false
+runner_log_file: snapraid.log
+runner_log_maxsize: 5000
+runner_send_conditions: ['success', 'error']
+runner_email_shorten: true
+runner_email_subject: '[SnapRAID] Status Report:'
+runner_email_from: ''
+runner_email_to: ''
+runner_email_maxsize: 500
+runner_smtp_host: ''
+runner_smtp_port: ''
+runner_smtp_ssl: false
+runner_smtp_tls: false
+runner_smtp_user: ''
+runner_smtp_password: ''
+runner_telegram_token: ''
+runner_telegram_chatid: ''
+runner_scrub_enabled: false
+runner_scrub_percentage: 12
+runner_scrub_older_than: 10

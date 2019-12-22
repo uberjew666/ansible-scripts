@@ -1,0 +1,46 @@
+[snapraid]
+; path to the snapraid executable (e.g. /bin/snapraid)
+executable = {{ runner_snapraid_exe }}
+; path to the snapraid config to be used
+config = {{ runner_config_path }}
+; abort operation if there are more deletes than this, set to -1 to disable
+deletethreshold = {{ runner_delete_threshold  }}
+; if you want touch to be ran each time
+touch = {{ runner_touch_enabled }}
+
+[logging]
+; logfile to write to, leave empty to disable
+file = {{ runner_log_file }}
+; maximum logfile size in KiB, leave empty for infinite
+maxsize = {{ runner_log_maxsize }}
+
+[email]
+; when to send an email, comma-separated list of [success, error]
+sendon = {{ runner_send_conditions | join(",") }}
+; set to false to get full programm output via email
+short = {{ runner_email_shorten }}
+subject = {{ runner_email_subject }}
+from = {{ runner_email_from }}
+to = {{ runner_email_to }}
+; maximum email size in KiB
+maxsize = {{ runner_email_maxsize }}
+
+[smtp]
+host = {{ runner_smtp_host }}
+; leave empty for default port
+port = {{ runner_smtp_port }}
+; set to "true" to activate
+ssl = {{ runner_smtp_ssl }}
+tls = {{ runner_smtp_tls }}
+user = {{ runner_smtp_user }}
+password = {{ runner_smtp_password }}
+
+[telegram]
+token = {{ runner_telegram_token }}
+chatid = {{ runner_telegram_chatid }}
+
+[scrub]
+; set to true to run scrub after sync
+enabled = {{ runner_scrub_enabled }}
+percentage = {{ runner_scrub_percentage }}
+older-than = {{ runner_scrub_older_than }}

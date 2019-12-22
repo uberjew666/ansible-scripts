@@ -35,3 +35,8 @@
     owner: root
     group: root
     mode: 0640
+
+- name: Setup Snapraid-Runner script
+  import_role:
+    name: snapraid-runner
+  tags: runner
