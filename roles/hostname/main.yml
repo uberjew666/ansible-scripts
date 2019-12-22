@@ -1,0 +1,12 @@
+---
+- name: Set hostname
+  hostname:
+    name: "{{ system.hostname }}"
+    use: systemd
+
+- name: Update hostfile
+  lineinfile:
+    dest: /etc/hosts
+    regexp: '^127\.0\.0\.1[ \t]+localhost'
+    line: "127.0.0.1 localhost {{ system.hostname }}"
+    state: present
