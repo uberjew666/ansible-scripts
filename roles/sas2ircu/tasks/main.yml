@@ -1,17 +1,8 @@
 ---
-- name: Add HWRaid repositry key
-  apt_key:
-    url: "https://hwraid.le-vert.net/debian/hwraid.le-vert.net.gpg.key"
-    state: present
+- name: Install latest version
+  import_tasks: latest.yml
+  when: sas2ircu.version == "latest"
 
-- name: Add HWRaid repository
-  when: ansible_os_family == "Debian"
-  apt_repository:
-    repo: deb http://hwraid.le-vert.net/{{ ansible_distribution|lower }} {{ ansible_distribution_release }} main
-    state: present
-
-- name: Install sas2ircu
-  apt:
-    name: sas2ircu
-    state: present
-    update_cache: true
+- name: Install repository version
+  import_tasks: repo.yml
+  when: sas2ircu.version == "repo"

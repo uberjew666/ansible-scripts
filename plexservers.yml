@@ -4,8 +4,7 @@
   connection: local
 
   roles:
-    - { role: common, tags: common }
-    - { role: ssh, tags: ssh }
+    - { role: system, tags: system }
     - { role: sas2ircu, tags: sas2ircu }
     - { role: sasutils, tags: sasutils }
     - { role: snapraid, tags: snapraid }

@@ -1,0 +1,73 @@
+---
+- name: Install required packages
+  apt:
+    state: present
+    name:
+      - apt-transport-https
+      - ca-certificates
+      - software-properties-common
+
+- name: Install common packages
+  apt:
+    state: present
+    name:
+      - "vim"
+      - "zip"
+      - "unzip"
+      - "p7zip"
+      - "curl"
+      - "httpie"
+      - "sqlite3"
+      - "tree"
+      - "lsof"
+      - "man-db"
+      - "ksmtuned"
+      - "git"
+      - "pwgen"
+      - "rsync"
+      - "logrotate"
+      - "htop"
+      - "iotop"
+      - "nload"
+      - "fail2ban"
+      - "ufw"
+      - "ncdu"
+      - "mc"
+      - "speedtest-cli"
+      - "dnsutils"
+      - "screen"
+      - "tmux"
+      - "apache2-utils"
+      - "jq"
+      - "lib32z1"
+      - "moreutils"
+      - "python3-pip"
+  ignore_errors: true
+
+- name: Set timezone
+  timezone:
+    name: "{{ system.timezone }}"
+  when: system.timezone is defined
+
+- name: Set hostname
+  import_role:
+    name: hostname
+  when: system.hostname is defined
+  tags: hostname
+
+- name: Create user - simon
+  user:
+    name: simon
+    state: present
+    comment: Simon
+    append: yes
+
+- name: Add authorized keys
+  authorized_key:
+    user: simon
+    state: present
+    key: "{{ item.key }}"
+    comment: "{{ item.comment }}"
+  loop: "{{ authorised_keys }}"
+  loop_control:
+    label: "{{ item.comment }}"

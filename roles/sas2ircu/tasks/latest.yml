@@ -1,0 +1,33 @@
+---
+- name: Download latest binary
+  unarchive:
+    src: https://download.lenovo.com/servers/mig/2016/07/07/4958/lsi_utl_mpt2sas_sas2ircu-20.00.00.00_linux_32-64.zip
+    dest: /usr/sbin
+    remote_src: yes
+    extra_opts: ["-j"]
+    creates: /usr/sbin/sas2ircu
+  register: x
+
+- name: Set binary as executable
+  file:
+    path: /usr/sbin/sas2ircu
+    owner: root
+    group: root
+    mode: a+x
+  when: x is changed
+
+- name: Get sas2ircu version
+  shell: "/usr/sbin/sas2ircu --version | grep Version | awk '{ print $2}'"
+  register: sas2ircu_version
+  changed_when: false
+  ignore_errors: yes
+  when: x is success
+
+- name: Display sas2ircu version
+  debug:
+    msg: "sas2ircu {{ sas2ircu_version.stdout }} installed."
+  when: x is success
+
+- debug:
+    msg: "sas2ircu install failed."
+  when: x is not success

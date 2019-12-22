@@ -1,0 +1,33 @@
+---
+- name: Add HWRaid repositry key
+  apt_key:
+    url: "https://hwraid.le-vert.net/debian/hwraid.le-vert.net.gpg.key"
+    state: present
+
+- name: Add HWRaid repository
+  when: ansible_os_family == "Debian"
+  apt_repository:
+    repo: deb http://hwraid.le-vert.net/{{ ansible_distribution|lower }} {{ ansible_distribution_release }} main
+    state: present
+
+- name: Install sas2ircu
+  apt:
+    name: sas2ircu
+    state: present
+    update_cache: true
+
+- name: Get sas2ircu version
+  shell: "/usr/sbin/sas2ircu --version | grep Version | awk '{ print $2}'"
+  register: sas2ircu_version
+  changed_when: false
+  ignore_errors: yes
+  when: x is success
+
+- name: Display sas2ircu version
+  debug:
+    msg: "sas2ircu {{ sas2ircu_version.stdout }} installed."
+  when: x is success
+
+- debug:
+    msg: "sas2ircu install failed."
+  when: x is not success
