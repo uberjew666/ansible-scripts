@@ -1,0 +1,26 @@
+---
+- name: Enable SCSI generic module
+  modprobe:
+    name: sg
+    state: present
+  changed_when: false
+  become: true
+
+- name: Install sasutils
+  pip:
+    name: sasutils
+    state: present
+    executable: pip3
+
+- name: Add disk identifier udev rule
+  template:
+    src: disks.rules.j2
+    dest: /etc/udev/rules.d/10-disks.rules
+    owner: root
+    group: root
+    mode: 644
+  register: x
+
+- name: Run udev rule
+  shell: /sbin/udevadm trigger
+  when: x is changed

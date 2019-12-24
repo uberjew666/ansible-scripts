@@ -6,6 +6,7 @@
   roles:
     - { role: common, tags: common }
     - { role: sas2ircu, tags: sas2ircu }
+    - { role: sasutils, tags: sasutils }
     - { role: snapraid, tags: snapraid }
     - { role: mergerfs, tags: mergerfs }
     - { role: users, tags: users }
