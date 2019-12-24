@@ -1,0 +1,17 @@
+---
+- name: Disable password authentication
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^PasswordAuthentication'
+    line: 'PasswordAuthentication no'
+  notify: Restart sshd
+
+- meta: flush_handlers
+
+- name: Allow SSH through firewall
+  become: yes
+  ufw:
+    rule: allow
+    port: '22'
+    proto: tcp
+    comment: SSH
