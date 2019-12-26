@@ -20,7 +20,7 @@
 
 - name: Format new partitions
   filesystem:
-    dev: "{{ item.device}}1"
+    dev: "{{ item.device + '1' }}"
     fstype: "{{ item.fstype }}"
   with_items:
     - "{{ disks }}"
@@ -35,7 +35,7 @@
     - "{{ disks }}"
 
 - name: Get UUID for partition
-  command: blkid -s UUID -o value {{ item.device }}1
+  command: blkid -s UUID -o value {{ item.device + '1' }}
   register: disk_uuid
   with_items:
     - "{{ disks }}"
