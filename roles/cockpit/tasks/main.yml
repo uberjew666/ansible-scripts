@@ -1,0 +1,17 @@
+---
+- name: Add backports to apt
+  lineinfile:
+    path: /etc/apt/sources.list
+    regexp: 'xenial-backports'
+    line: 'deb http://archive.ubuntu.com/ubuntu/ xenial-backports main restricted universe multiverse'
+    state: present
+
+- name: Install Cockpit
+  apt:
+    name: cockpit
+
+- name: Start Cockpit
+  systemd:
+    name: cockpit.service
+    state: started
+    enabled: yes

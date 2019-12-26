@@ -18,3 +18,4 @@
     - { role: nginx, tags: nginx }
     - { role: cronjobs, tags: cronjobs }
     - { role: bandcamp, tags: bandcamp }
+    - { role: cockpit, tags: cockpit }
