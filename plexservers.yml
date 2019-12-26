@@ -5,6 +5,7 @@
 
   roles:
     - { role: system, tags: system }
+    - { role: ssh, tags: ssh }
     - { role: sas2ircu, tags: sas2ircu }
     - { role: sasutils, tags: sasutils }
     - { role: snapraid, tags: snapraid }
