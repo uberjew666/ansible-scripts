@@ -1,0 +1,7 @@
+mergerfs:
+  source_mounts:
+    - /mnt/disk05
+    - /mnt/disk06
+  pool_mount: /mnt/
+  opts:
+    - defaults

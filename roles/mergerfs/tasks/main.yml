@@ -1,35 +1,22 @@
 ---
-- name: Download and install Mergerfs
-  apt:
-    deb: "https://github.com/trapexit/mergerfs/releases/download/{{ mergerfs_version }}/mergerfs_{{ mergerfs_version }}.{{ ansible_distribution }}-{{ ansible_distribution_release }}_amd64.deb"
-
-- name: Add MergerFS mount to fstab
-  blockinfile:
-    path: /etc/fstab
-    backup: yes
-    marker: "# {mark} MergerFS Disk Pool"
-    insertafter: EOF
-    block: |
-      {{ mount_dir }}/{{ disks.8.name }}:{{ mount_dir }}/{{ disks.9.name }}:{{ mount_dir }}/{{ disks.10.name }}:{{ mount_dir }}/{{ disks.12.name }}:{{ mount_dir }}/{{ disks.13.name }}:{{ mount_dir }}/{{ disks.14.name }} {{ data_dir }} fuse.mergerfs category.create=eplfs,moveonenospc=true,defaults,allow_other,minfreespace=20G,fsname=StoragePool
-
-- name: Create mount folders
-  file:
-    path: "{{ data_dir }}"
-    state: directory
-    mode: 0755
-
-- name: Mount data disks
-  shell: mount -av
+- name: Get latest MergerFS version
+  shell: curl -s https://api.github.com/repos/trapexit/mergerfs/releases/latest | jq -r ".tag_name"
   args:
-    creates: "{{ data_dir }}"
-
-- name: Check Snapraid is configured
-  shell: snapraid check
+    executable: /bin/bash
+    warn: no
   changed_when: false
-  register: snapraid_check
+  register: mergerfs_version
+  ignore_errors: yes
 
-- name: Sync Snapraid
-  shell: snapraid sync
-  args:
-    creates: /var/snapraid.content
-  when: "'No content file found. Assuming empty.' in snapraid_check.stderr"
+- name: Download and install MergerFS
+  apt:
+    deb: "https://github.com/trapexit/mergerfs/releases/download/{{ mergerfs_version.stdout }}/mergerfs_{{ mergerfs_version.stdout }}.{{ ansible_distribution }}-{{ ansible_distribution_release }}_amd64.deb"
+
+- name: Mount disks
+  mount:
+    state: present
+    src: "{{ mergerfs.source_mounts | join(':') }}"
+    path: "{{ mergerfs.pool_mount }}"
+    fstype: fuse.mergerfs
+    opts: "{{ mergerfs.opts | join(',') }}"
+    backup: yes
