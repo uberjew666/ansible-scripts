@@ -6,6 +6,7 @@
     remote_src: yes
     extra_opts: ["-j"]
     creates: /usr/sbin/sas2ircu
+    validate_certs: no
   register: x
 
 - name: Set binary as executable
