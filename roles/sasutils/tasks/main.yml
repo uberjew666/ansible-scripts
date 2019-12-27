@@ -6,6 +6,11 @@
   changed_when: false
   become: true
 
+- name: Install sg3_utils
+  apt:
+    name: sg3-utils
+    state: present
+
 - name: Install sasutils
   pip:
     name: sasutils
