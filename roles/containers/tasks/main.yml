@@ -319,6 +319,23 @@
     restart_policy: always
   tags: gmusic
 
+- name: ddclient
+  docker_container:
+    state: started
+    name: ddclient
+    image: linuxserver/ddclient
+    pull: true
+    volumes:
+      - "{{ configs_dir }}/ddclient:/config"
+    networks:
+      - name: cloudnet
+        aliases:
+          - ddclient
+    networks_cli_compatible: true
+    purge_networks: true
+    restart_policy: always
+  tags: ddclient
+
 - name: Remove dangling images
   docker_prune:
     images: true
