@@ -332,6 +332,10 @@
         aliases:
           - ddclient
     networks_cli_compatible: true
+    env:
+      PUID=1000
+      PGID=1001
+      TZ={{ timezone }}
     purge_networks: true
     restart_policy: always
   tags: ddclient
