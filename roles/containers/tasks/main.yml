@@ -70,7 +70,7 @@
     volumes:
       - "{{ configs_dir }}/hydra:/config"
     ports:
-      - "127.0.0.1:5075:5075"
+      - "127.0.0.1:5076:5076"
     networks:
       - name: cloudnet
         aliases:
@@ -83,7 +83,7 @@
     restart_policy: always
     healthcheck:
       start_period: 2s
-      test: "curl --fail --head --silent http://localhost:5075/hydra/ || exit 1"
+      test: "curl --fail --head --silent http://localhost:5076/hydra/ || exit 1"
       interval: 10s
   tags: hydra
 
