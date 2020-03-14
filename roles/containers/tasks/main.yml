@@ -144,7 +144,7 @@
   docker_container:
     state: started
     name: sonarr
-    image: linuxserver/sonarr:latest
+    image: linuxserver/sonarr:preview
     pull: true
     volumes:
       - "{{ configs_dir }}/sonarr:/config"
