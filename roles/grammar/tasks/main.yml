@@ -16,13 +16,14 @@
     build:
       path: "{{ configs_dir }}/gramarr"
     name: linuxserver/gramarr
-    tag: v1
+    tag: latest
     source: build
 
 - name: Gramarr
   docker_container:
     state: started
     name: gramarr
+    image: linuxserver/gramarr:latest
     networks:
       - name: cloudnet
         aliases:
