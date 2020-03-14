@@ -1,0 +1,32 @@
+---
+- name: Clone Gramarr
+  git:
+    repo: 'https://github.com/alcmoraes/gramarr.git'
+    dest: "{{ configs_dir }}/gramarr"
+    update: true
+
+- name: Create config.json
+  template:
+    src: config.json.j2
+    dest: "{{ configs_dir }}/gramarr/config.json"
+    mode: '0640'
+
+- name: Build Gramarr image
+  docker_image:
+    build:
+      path: "{{ configs_dir }}/gramarr"
+    name: linuxserver/gramarr
+    tag: v1
+    source: build
+
+- name: Gramarr
+  docker_container:
+    state: started
+    name: gramarr
+    networks:
+      - name: cloudnet
+        aliases:
+          - gramarr
+    networks_cli_compatible: true
+    restart_policy: always
+  tags: gramarr

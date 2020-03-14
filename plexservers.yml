@@ -11,6 +11,7 @@
     - { role: docker, tags: docker }
     - { role: docker-compose, tags: compose }
     - { role: containers, tags: containers }
+    - { role: gramarr, tags: gramarr }
     - { role: netdata, tags: netdata }
     - { role: cronjobs, tags: cron }
     - { role: samba, tags: samba }
