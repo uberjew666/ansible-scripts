@@ -9,7 +9,7 @@ data_dir: /storage
 # Container config directory
 configs_dir: /opt/configs
 # Downloads directory
-download_dir: /downloads
+download_dir: /storage/downloads
 # Media directory
 media_dir: "{{ data_dir }}/media"
 # Music directory
