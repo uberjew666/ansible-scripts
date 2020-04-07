@@ -129,7 +129,7 @@
       PUID=111
       PGID=118
       TZ={{ timezone }}
-      VERSION=1.18.2.2029-36236cc4c
+      VERSION=1.19.1.2630-72c16a276
     restart_policy: always
     network_mode: host
     devices:
