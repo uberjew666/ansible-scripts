@@ -65,7 +65,7 @@
   docker_container:
     state: started
     name: hydra
-    image: linuxserver/hydra:latest
+    image: linuxserver/hydra2:latest
     pull: true
     volumes:
       - "{{ configs_dir }}/hydra:/config"
