@@ -323,7 +323,7 @@
   docker_container:
     state: started
     name: ddclient
-    image: linuxserver/ddclient
+    image: linuxserver/ddclient:latest
     pull: true
     volumes:
       - "{{ configs_dir }}/ddclient:/config"
@@ -339,6 +339,25 @@
     purge_networks: true
     restart_policy: always
   tags: ddclient
+
+- name: Synclounge
+  docker_container:
+    state: started
+    name: synclounge
+    image: starbix/synclounge:nginx
+    pull: true
+    ports:
+      - "8800:80"
+    networks:
+      - name: cloudnet
+        aliases:
+          - synclounge
+    env:
+      DOMAIN: antalon.asuscomm.com
+    networks_cli_compatible: true
+    purge_networks: true
+    restart_policy: always
+  tags: synclounge
 
 - name: Remove dangling images
   docker_prune:
