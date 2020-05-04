@@ -353,7 +353,7 @@
         aliases:
           - synclounge
     env:
-      DOMAIN: antalon.asuscomm.com
+      DOMAIN: "antalon.asuscomm.com"
     networks_cli_compatible: true
     purge_networks: true
     restart_policy: always
