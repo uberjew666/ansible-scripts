@@ -1,34 +1,48 @@
 ---
 - name: Clone Gramarr
   git:
-    repo: 'https://github.com/alcmoraes/gramarr.git'
-    dest: /opt/gramarr
+    repo: 'https://github.com/uberjew666/gramarr.git'
+    dest: "/opt/gramarr"
     update: true
 
 - name: Create config.json
-  template:
-    src: config.json.j2
-    dest: /opt/gramarr/config.json
-    mode: '0640'
-    force: true
+  copy:
+    src: "/opt/gramarr/config.json.template"
+    dest: "/opt/gramarr/config.json"
+    remote_src: true
 
 - name: Build Gramarr image
   docker_image:
     build:
-      path: /opt/gramarr
+      path: "/opt/gramarr"
+      pull: false
     name: linuxserver/gramarr
     tag: latest
     source: build
 
-- name: Gramarr
+- name: Create directory
+  file:
+    path: "/opt/configs/gramarr"
+    state: directory
+    mode: '0755'
+
+- name: Create config.json
+  template:
+    src: config.json.j2
+    dest: "/opt/configs/gramarr/config.json"
+    mode: '0640'
+
+- name: Deploy gramarr container
   docker_container:
     state: started
     name: gramarr
-    image: linuxserver/gramarr:latest
+    image: linuxserver/gramarr
+    recreate: true
+    volumes:
+        - "{{ configs_dir }}/gramarr:/config"
     networks:
       - name: cloudnet
         aliases:
           - gramarr
     networks_cli_compatible: true
     restart_policy: always
-  tags: gramarr
