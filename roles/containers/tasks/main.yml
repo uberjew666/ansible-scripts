@@ -359,6 +359,32 @@
     restart_policy: always
   tags: synclounge
 
+- name: Health Checks
+  docker_container:
+    state: started
+    name: healthchecks
+    image: linuxserver/healthchecks:latest
+    pull: true
+    volumes:
+      - "{{ configs_dir }}/healthchecks:/config"
+    ports:
+      - "127.0.0.1:8000:8000"
+    networks:
+      - name: cloudnet
+        aliases:
+          - healthchecks
+    networks_cli_compatible: true
+    env:
+      PUID: "1000"
+      PGID: "1000"
+      SITE_NAME: "Healthchecks"
+      ALLOWED_HOSTS: "*"
+      SUPERUSER_EMAIL: "{{ healthchecks_superuser_email }}"
+      SUPERUSER_PASSWORD: "{{ healthchecks_superuser_password }}"
+    purge_networks: true
+    restart_policy: always
+  tags: healthchecks
+
 - name: Remove dangling images
   docker_prune:
     images: true
