@@ -254,6 +254,35 @@
       interval: 10s
   tags: lidarr
 
+- name: Bazarr
+  docker_container:
+    state: started
+    name: bazarr
+    image: linuxserver/bazarr:latest
+    pull: true
+    volumes:
+      - "{{ configs_dir }}/bazarr:/config"
+      - "{{ media_dir }}/Videos/Movies:/movies"
+      - "{{ media_dir }}/Videos/TV:/tv"
+    ports:
+      - "127.0.0.1:6767:6767"
+    networks:
+      - name: cloudnet
+        aliases:
+          - bazarr
+    networks_cli_compatible: true
+    env:
+      PUID: "1000"
+      PGID: "1001"
+      TZ: "Europe/London"
+      UMASK_SET: "002"
+    restart_policy: always
+    healthcheck:
+      start_period: 2s
+      test: "curl --fail --head --silent http://localhost:6767/ || exit 1"
+      interval: 10s
+  tags: bazarr
+
 - name: Beets
   docker_container:
     state: started
