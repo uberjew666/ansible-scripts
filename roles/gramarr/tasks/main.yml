@@ -4,6 +4,7 @@
     repo: 'https://github.com/uberjew666/gramarr.git'
     dest: "/opt/gramarr"
     update: true
+  register: git_repo
 
 - name: Create config.json
   copy:
@@ -19,6 +20,9 @@
     name: linuxserver/gramarr
     tag: latest
     source: build
+    force_source: true
+  when: git_repo is changed
+  register: image
 
 - name: Create directory
   file:
@@ -46,3 +50,4 @@
           - gramarr
     networks_cli_compatible: true
     restart_policy: always
+  when: image is changed
