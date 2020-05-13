@@ -1,13 +1,13 @@
 ---
 ubca_diffiehellman_key_size: 1024
-ubca_pem_passphrase: P@ssw0rd!
-ubca_country_name: US
-ubca_state_province_name: New York
-ubca_locality_name: New York
-ubca_organisation_name: Ubiquiti
-ubca_organisation_unit_name: Support
-ubca_ca_common_name: root
-ubca_server_common_name: server
-ubca_email_address: support@ubnt.com
+ubca_pem_passphrase: 'P@ssw0rd!'
+ubca_country_name: 'US'
+ubca_state_province_name: 'New York'
+ubca_locality_name: 'New York'
+ubca_organisation_name: 'Ubiquiti'
+ubca_organisation_unit_name: 'Support'
+ubca_ca_common_name: 'root'
+ubca_server_common_name: 'server'
+ubca_email_address: 'support@ubnt.com'
 
-ubca_cleanup: false
+ubca_cleanup: no

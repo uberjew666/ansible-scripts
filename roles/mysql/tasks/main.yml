@@ -1,21 +1,21 @@
 ---
-- name: create mysql database
+- name: 'create mysql database'
   mysql_db:
-    name: "{{ db_name }}"
-    encoding: utf8
-    collation: utf8_general_ci
-    state: present
-    
-- name: add observium user to database
+    name: '{{ db_name }}'
+    encoding: 'utf8'
+    collation: 'utf8_general_ci'
+    state: 'present'
+
+- name: 'add observium user to database'
   mysql_user:
-    name: "{{mysql_db_user }}"
-    host: localhost
-    password: "{{ mysql_db_pass }}"
+    name: '{{mysql_db_user }}'
+    host: 'localhost'
+    password: '{{ mysql_db_pass }}'
     priv: '{{ db_name }}.*:ALL'
-    state: present
-    
-- name: insert default schema
-  command: ./discovery.php -u
+    state: 'present'
+
+- name: 'insert default schema'
+  command: './discovery.php -u'
   args:
-    chdir: "{{ observium_dir}}/"
-  notify: restart mysql
+    chdir: '{{ observium_dir}}/'
+  notify: 'restart mysql'

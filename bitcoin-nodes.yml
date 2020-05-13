@@ -1,7 +1,7 @@
 ---
-- name: Setup Bitcoin Full Node
-  hosts: bitcoin-nodes
+- name: 'Setup Bitcoin Full Node'
+  hosts: 'bitcoin-nodes'
   become: yes
 
   roles:
-    - { role: bitcoin-node, tags: bitcoin }
+    - { role: 'bitcoin-node', tags: 'bitcoin' }

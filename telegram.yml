@@ -1,11 +1,11 @@
 ---
-- name: Test telegram
-  hosts: plexservers
+- name: 'Test telegram'
+  hosts: 'plexservers'
   gather_facts: no
 
   tasks:
-    - name: Send Telegram message
+    - name: 'Send Telegram message'
       telegram:
-        token: "{{ telegram_bot_token }}"
-        chat_id: "{{ telegram_chat }}"
-        msg: What is my purpose?
+        token: '{{ telegram_bot_token }}'
+        chat_id: '{{ telegram_chat }}'
+        msg: 'What is my purpose?'

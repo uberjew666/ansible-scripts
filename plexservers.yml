@@ -1,20 +1,20 @@
 ---
-- hosts: plexservers
-  become: true
-  connection: local
+- hosts: 'plexservers'
+  become: yes
+  connection: 'local'
 
   roles:
-    - { role: sas2ircu, tags: sas2ircu }
-    - { role: snapraid, tags: snapraid }
-    - { role: mergerfs, tags: mergerfs }
-    - { role: users, tags: users }
-    - { role: docker, tags: docker }
-    - { role: docker-compose, tags: compose }
-    - { role: containers, tags: containers }
-    - { role: gramarr, tags: gramarr }
-    - { role: netdata, tags: netdata }
-    - { role: cronjobs, tags: cron }
-    - { role: samba, tags: samba }
-    - { role: nginx, tags: nginx }
-    - { role: cronjobs, tags: cronjobs }
-    - { role: bandcamp, tags: bandcamp }
+    - { role: 'sas2ircu', tags: 'sas2ircu' }
+    - { role: 'snapraid', tags: 'snapraid' }
+    - { role: 'mergerfs', tags: 'mergerfs' }
+    - { role: 'users', tags: 'users' }
+    - { role: 'docker', tags: 'docker' }
+    - { role: 'docker-compose', tags: 'compose' }
+    - { role: 'containers', tags: 'containers' }
+    - { role: 'gramarr', tags: 'gramarr' }
+    - { role: 'netdata', tags: 'netdata' }
+    - { role: 'cronjobs', tags: 'cron' }
+    - { role: 'samba', tags: 'samba' }
+    - { role: 'nginx', tags: 'nginx' }
+    - { role: 'cronjobs', tags: 'cronjobs' }
+    - { role: 'bandcamp', tags: 'bandcamp' }

@@ -1,10 +1,10 @@
 ---
-- name: Generate Diffie-Hellman key file (Takes a while)
-  shell: openssl dhparam -out /config/auth/dh.pem -2 {{ ubca_diffiehellman_key_size }}
+- name: 'Generate Diffie-Hellman key file (Takes a while)'
+  shell: 'openssl dhparam -out /config/auth/dh.pem -2 {{ ubca_diffiehellman_key_size }}'
   args:
-    creates: /config/auth/dh.pem
+    creates: '/config/auth/dh.pem'
 
-- name: Generate root certificate
+- name: 'Generate root certificate'
   shell: |
     ./CA.sh -newca
 
@@ -32,22 +32,22 @@
     expect "Email Address:"
     send "{{ ubca_email_address }}\n"
   args:
-    executable: /usr/bin/expect
-    chdir: /usr/lib/ssl/misc
-    creates: demoCA/cacert.pem
+    executable: '/usr/bin/expect'
+    chdir: '/usr/lib/ssl/misc'
+    creates: 'demoCA/cacert.pem'
 
-- name: Copy root certificate and key
+- name: 'Copy root certificate and key'
   copy:
-    src: "{{ item }}"
-    dest: /config/auth
-    owner: root
-    group: root
-    remote_src: true
+    src: '{{ item }}'
+    dest: '/config/auth'
+    owner: 'root'
+    group: 'root'
+    remote_src: 'yes'
   with_items:
-    - /usr/lib/ssl/misc/demoCA/cacert.pem
-    - /usr/lib/ssl/misc/demoCA/private/cakey.pem
+    - '/usr/lib/ssl/misc/demoCA/cacert.pem'
+    - '/usr/lib/ssl/misc/demoCA/private/cakey.pem'
 
-- name: Generate router certificate
+- name: 'Generate router certificate'
   shell: |
     ./CA.sh -newreg
 
@@ -72,11 +72,11 @@
     expect "Email Address:"
     send "{{ ubca_email_address }}\n"
   args:
-    executable: /usr/bin/expect
-    chdir: /usr/lib/ssl/misc
-    creates: newcert.pem
+    executable: '/usr/bin/expect'
+    chdir: '/usr/lib/ssl/misc'
+    creates: 'newcert.pem'
 
-- name: Sign router certificate
+- name: 'Sign router certificate'
   shell: |
     expect "Sign the certificate? [y/n]:"
     send "y\n"
@@ -84,16 +84,16 @@
     expect "1 out of 1 certificate requests certified, commit? [y/n]"
     send "y\n"
   args:
-    executable: /usr/bin/expect
-    chdir: /usr/lib/ssl/misc
+    executable: '/usr/bin/expect'
+    chdir: '/usr/lib/ssl/misc'
 
-- name: Move router certficate
-  command: mv newcert.pem /config/auth/server.pem && mv newkey.pem /config/auth/server.key
+- name: 'Move router certficate'
+  command: 'mv newcert.pem /config/auth/server.pem && mv newkey.pem /config/auth/server.key'
   args:
-    creates: /config/auth/server.pem
+    creates: '/config/auth/server.pem'
 
-- name: Cleanup
+- name: 'Cleanup'
   file:
-    path: /usr/lib/ssl/misc/demoCA
-    state: absent
-  when: ubca_cleanup is true
+    path: '/usr/lib/ssl/misc/demoCA'
+    state: 'absent'
+  when: 'ubca_cleanup is true'

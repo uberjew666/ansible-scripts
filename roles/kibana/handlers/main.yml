@@ -1,5 +1,5 @@
 ---
-- name: restart kibana
+- name: 'restart kibana'
   service:
-    name: kibana
-    state: restarted
+    name: 'kibana'
+    state: 'restarted'

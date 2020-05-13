@@ -1,70 +1,69 @@
 ---
-- name: Add Bitcoin repo
+- name: 'Add Bitcoin repo'
   apt_repository:
     repo: 'ppa:bitcoin/bitcoin'
-    state: present
+    state: 'present'
 
-- name: Install Bitcoin Daemon
+- name: 'Install Bitcoin Daemon'
   apt:
-    name: "{{ item }}"
-    state: present
-    update_cache: yes
-  with_items:
-    - bitcoind
-    - bitcoin-qt
+    state: 'present'
+    update_cache: 'yes'
+    name:
+      - 'bitcoind'
+      - 'bitcoin-qt'
 
-- name: Create Bitcoind user
+- name: 'Create Bitcoind user'
   user:
-    name: "{{ bitcoin_user }}"
-    state: present
+    name: '{{ bitcoin_user }}'
+    state: 'present'
 
-- name: Create critical directories
+- name: 'Create critical directories'
   file:
-    path: "{{ item }}"
-    owner: "{{ bitcoin_user }}"
-    group: "{{ bitcoin_user }}"
-    mode: 0750
-    state: directory
+    path: '{{ item }}'
+    owner: '{{ bitcoin_user }}'
+    group: '{{ bitcoin_user }}'
+    mode: '0750'
+    state: 'directory'
   with_items:
-    - "{{ bitcoin_data_dir }}"
-    - "{{ bitcoin_conf_dir }}"
-    - "{{ bitcoin_home_dir }}/.bitcoin"
+    - '{{ bitcoin_data_dir }}'
+    - '{{ bitcoin_conf_dir }}'
+    - '{{ bitcoin_home_dir }}/.bitcoin'
 
-- name: Copy Bitcoind config file
+- name: 'Copy Bitcoind config file'
   template:
-    src: server.conf.j2
-    dest: "{{ bitcoin_conf_dir }}/bitcoin.conf"
-    owner: "{{ bitcoin_user }}"
-    group: "{{ bitcoin_user }}"
-    mode: 0640
+    src: 'server.conf.j2'
+    dest: '{{ bitcoin_conf_dir }}/bitcoin.conf'
+    owner: '{{ bitcoin_user }}'
+    group: '{{ bitcoin_user }}'
+    mode: '0640'
 
-- name: Copy Bitcoin client config file
+- name: 'Copy Bitcoin client config file'
   template:
-    src: client.conf.j2
-    dest: "{{ bitcoin_home_dir }}/.bitcoin/bitcoin.conf"
-    owner: "{{ bitcoin_user }}"
-    group: "{{ bitcoin_user }}"
-    mode: 0600
+    src: 'client.conf.j2'
+    dest: '{{ bitcoin_home_dir }}/.bitcoin/bitcoin.conf'
+    owner: '{{ bitcoin_user }}'
+    group: '{{ bitcoin_user }}'
+    mode: '0600'
 
-- name: Copy Bitcoind startup script
+- name: 'Copy Bitcoind startup script'
   template:
-    src: bitcoind.service.j2
-    dest: /lib/systemd/system/bitcoind.service
-    owner: root
-    group: root
-    mode: 0644
+    src: 'bitcoind.service.j2'
+    dest: '/lib/systemd/system/bitcoind.service'
+    owner: 'root'
+    group: 'root'
+    mode: '0644'
 
-- name: Reload Systemd
+- name: 'Reload Systemd'
   systemd:
-    name: bitcoind
-    state: started
+    name: 'bitcoind'
+    state: 'started'
     enabled: yes
     daemon_reload: yes
 
-- name: Open Firewall ports
+- name: 'Open Firewall ports'
   ufw:
-    rule: allow
-    port: "{{ item }}"
+    rule: 'allow'
+    port: '{{ item }}'
   with_items:
-    - ssh
-    - 8333
+    - 'ssh'
+    - '8333'

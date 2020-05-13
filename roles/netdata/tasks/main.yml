@@ -1,47 +1,46 @@
 ---
-- name: Install prerequisites
+- name: 'Install prerequisites'
   apt:
-    name: "{{ item }}"
-    state: present
-  with_items:
-    - zlib1g-dev
-    - uuid-dev
-    - libmnl-dev
-    - gcc
-    - make
-    - git
-    - autoconf
-    - autoconf-archive
-    - autogen
-    - automake
-    - pkg-config curl
+    name:
+      - 'zlib1g-dev'
+      - 'uuid-dev'
+      - 'libmnl-dev'
+      - 'gcc'
+      - 'make'
+      - 'git'
+      - 'autoconf'
+      - 'autoconf-archive'
+      - 'autogen'
+      - 'automake'
+      - 'pkg-config curl'
+    state: 'present'
 
-- name: Clone Netdata repo
+- name: 'Clone Netdata repo'
   git:
-    repo: https://github.com/firehol/netdata.git
-    dest: /opt/netdata
+    repo: 'https://github.com/firehol/netdata.git'
+    dest: '/opt/netdata'
     depth: 1
     update: yes
 
-- name: Install Netdata
-  shell: ./netdata-installer.sh
+- name: 'Install Netdata'
+  shell: './netdata-installer.sh'
   args:
-    chdir: /opt/netdata
-  register: netdata_install_status
+    chdir: '/opt/netdata'
+  register: 'netdata_install_status'
 
-- name: Change bind address
+- name: 'Change bind address'
   lineinfile:
-    path: /etc/netdata/netdata.conf
+    path: '/etc/netdata/netdata.conf'
     regexp: 'bind to ='
     line: 'bind to = 127.0.0.1'
-    owner: netdata
-    group: netdata
-    mode: 0660
-  notify: Restart Netdata
+    owner: 'netdata'
+    group: 'netdata'
+    mode: '0660'
+  notify: 'Restart Netdata'
 
-- name: Add auto updater to cron
+- name: 'Add auto updater to cron'
   cron:
-    name: set netdata updater
+    name: 'set netdata updater'
     minute: 0
     hour: 6
-    job: "/opt/netdata/netdata-installer.sh --auto-update"
+    job: '/opt/netdata/netdata-installer.sh --auto-update'

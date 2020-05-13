@@ -1,53 +1,52 @@
 ---
-- name: Install prerequisites
+- name: 'Install prerequisites'
   apt:
-    name: "{{ item }}"
-    state: present
-  with_items:
-    - parted
-    - xfsprogs
-    - btrfs-tools
+    name:
+      - 'parted'
+      - 'xfsprogs'
+      - 'btrfs-tools'
+    state: 'present'
 
-- name: Create partition
+- name: 'Create partition'
   parted:
-    state: present
-    label: gpt
-    name: gpt
-    device: "{{ item.device }}"
+    state: 'present'
+    label: 'gpt'
+    name: 'gpt'
+    device: '{{ item.device }}'
     number: 1
   with_items:
-    - "{{ disks }}"
+    - '{{ disks }}'
 
-- name: Format new partitions
+- name: 'Format new partitions'
   filesystem:
-    dev: "{{ item.device}}1"
-    fstype: "{{ item.fstype }}"
+    dev: '{{ item.device}}1'
+    fstype: '{{ item.fstype }}'
   with_items:
-    - "{{ disks }}"
+    - '{{ disks }}'
 
-- name: Ensure mount directory exists
+- name: 'Ensure mount directory exists'
   file:
-    state: directory
-    path: "{{ item.mount }}"
-    owner: "{{ item.owner | default('root') }}"
-    group: "{{ item.group | default('root') }}"
+    state: 'directory'
+    path: '{{ item.mount }}'
+    owner: '{{ item.owner | default("root") }}'
+    group: '{{ item.group | default("root") }}'
   with_items:
-    - "{{ disks }}"
+    - '{{ disks }}'
 
-- name: Get UUID for partition
-  command: blkid -s UUID -o value {{ item.device }}1
-  register: disk_uuid
+- name: 'Get UUID for partition'
+  command: 'blkid -s UUID -o value {{ item.device }}1'
+  register: 'disk_uuid'
   with_items:
-    - "{{ disks }}"
-  changed_when: false
+    - '{{ disks }}'
+  changed_when: no
 
-- name: Mount new partitions
+- name: 'Mount new partitions'
   mount:
-    state: mounted
-    path: "{{ item.0.mount }}"
-    src: "UUID={{ item.1.stdout }}"
-    fstype: "{{ item.0.fstype }}"
-    opts: "{{ item.0.mount_options }}"
+    state: 'mounted'
+    path: '{{ item.0.mount }}'
+    src: 'UUID={{ item.1.stdout }}'
+    fstype: '{{ item.0.fstype }}'
+    opts: '{{ item.0.mount_options }}'
   with_together:
-    - "{{ disks }}"
-    - "{{ disk_uuid.results }}"
+    - '{{ disks }}'
+    - '{{ disk_uuid.results }}'

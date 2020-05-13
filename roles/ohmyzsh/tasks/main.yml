@@ -1,29 +1,29 @@
 ---
-- name: Install zsh
+- name: 'Install zsh'
   apt:
-    name: zsh
-    state: present
-  become: yes
+    name: 'zsh'
+    state: 'present'
+  become: 'yes'
 
-- name: Clone Oh my Zsh repository
+- name: 'Clone Oh my Zsh repository'
   git:
-    repo: https://github.com/robbyrussell/oh-my-zsh.git
-    dest: ~/.oh-my-zsh
+    repo: 'https://github.com/robbyrussell/oh-my-zsh.git'
+    dest: '~/.oh-my-zsh'
     depth: 1
 
-- name: Configure Oh my Zsh
+- name: 'Configure Oh my Zsh'
   template:
-    src: .zshrc.j2
-    dest: ~/.zshrc
-    mode: 0644
+    src: '.zshrc.j2'
+    dest: '~/.zshrc'
+    mode: '0644'
 
-- name: Change default shell to Zsh
+- name: 'Change default shell to Zsh'
   user:
-    name: "{{ lookup('env','USER') }}"
-    shell: /bin/zsh
+    name: '{{ lookup("env","USER") }}'
+    shell: '/bin/zsh'
 
-- name: Install Powerline fonts
+- name: 'Install Powerline fonts'
   apt:
-    name: fonts-powerline
-    state: present
+    name: 'fonts-powerline'
+    state: 'present'
   become: yes

@@ -1,58 +1,58 @@
 ---
 - name:
-  hosts: vcenter
+  hosts: 'vcenter'
   gather_facts: no
-  connection: local
+  connection: 'local'
 
   tasks:
-    - name: Gather facts
+    - name: 'Gather facts'
       local_action:
-        module: vmware_vm_facts
-        hostname: "{{ hostname }}"
-        username: "{{ user }}"
-        password: "{{ pass }}"
+        module: 'vmware_vm_facts'
+        hostname: '{{ hostname }}'
+        username: '{{ user }}'
+        password: '{{ pass }}'
 
-    - name: Create new VM
+    - name: 'Create new VM'
       vmware_guest:
-        hostname: "{{ hostname }}"
-        username: "{{ user }}"
-        password: "{{ pass }}"
+        hostname: '{{ hostname }}'
+        username: '{{ user }}'
+        password: '{{ pass }}'
         validate_certs: no
-        esxi_hostname: "{{ esxi_hostname }}"
-        datacenter: "{{ datacenter }}"
-        name: testvm
-        state: present
-        guest_id: ubuntu64Guest
+        esxi_hostname: '{{ esxi_hostname }}'
+        datacenter: '{{ datacenter }}'
+        name: 'testvm'
+        state: 'present'
+        guest_id: 'ubuntu64Guest'
         disk:
-        - size_gb: 10
-          type: thin
-          datastore: "{{ datastore }}"
+          - size_gb: 10
+            type: 'thin'
+            datastore: '{{ datastore }}'
         hardware:
           memory_mb: 512
           num_cpus: 1
-          scsi: paravirtual
+          scsi: 'paravirtual'
         networks:
-        - name: "{{ network }}"
-          ip: 192.168.1.52
-          netmask: 255.255.255.192
-      register: deploy
+          - name: '{{ network }}'
+            ip: '192.168.1.52'
+            netmask: '255.255.255.192'
+      register: 'deploy'
 
-    - name: Shutdown new VM
+    - name: 'Shutdown new VM'
       vmware_guest:
-        hostname: "{{ hostname }}"
-        username: "{{ user }}"
-        password: "{{ pass }}"
+        hostname: '{{ hostname }}'
+        username: '{{ user }}'
+        password: '{{ pass }}'
         validate_certs: no
-        datacenter: "{{ datacenter }}"
-        name: testvm
-        state: poweredoff
+        datacenter: '{{ datacenter }}'
+        name: 'testvm'
+        state: 'poweredoff'
 
-    - name: Remove new VM
+    - name: 'Remove new VM'
       vmware_guest:
-        hostname: "{{ hostname }}"
-        username: "{{ user }}"
-        password: "{{ pass }}"
+        hostname: '{{ hostname }}'
+        username: '{{ user }}'
+        password: '{{ pass }}'
         validate_certs: no
-        datacenter: "{{ datacenter }}"
-        name: testvm
-        state: absent
+        datacenter: '{{ datacenter }}'
+        name: 'testvm'
+        state: 'absent'

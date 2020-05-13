@@ -1,53 +1,53 @@
 ---
-- name: Clone Gramarr
+- name: 'Clone Gramarr'
   git:
     repo: 'https://github.com/uberjew666/gramarr.git'
-    dest: "/opt/gramarr"
-    update: true
-  register: git_repo
+    dest: '/opt/gramarr'
+    update: yes
+  register: 'git_repo'
 
-- name: Create config.json
+- name: 'Create config.json'
   copy:
-    src: "/opt/gramarr/config.json.template"
-    dest: "/opt/gramarr/config.json"
-    remote_src: true
+    src: '/opt/gramarr/config.json.template'
+    dest: '/opt/gramarr/config.json'
+    remote_src: yes
 
-- name: Build Gramarr image
+- name: 'Build Gramarr image'
   docker_image:
     build:
-      path: "/opt/gramarr"
-      pull: false
-    name: linuxserver/gramarr
-    tag: latest
-    source: build
-    force_source: true
-  when: git_repo is changed
-  register: image
+      path: '/opt/gramarr'
+      pull: no
+    name: 'linuxserver/gramarr'
+    tag: 'latest'
+    source: 'build'
+    force_source: yes
+  when: 'git_repo is changed'
+  register: 'image'
 
-- name: Create directory
+- name: 'Create directory'
   file:
-    path: "/opt/configs/gramarr"
-    state: directory
+    path: '/opt/configs/gramarr'
+    state: 'directory'
     mode: '0755'
 
-- name: Create config.json
+- name: 'Create config.json'
   template:
-    src: config.json.j2
-    dest: "/opt/configs/gramarr/config.json"
+    src: 'config.json.j2'
+    dest: '/opt/configs/gramarr/config.json'
     mode: '0640'
 
-- name: Deploy gramarr container
+- name: 'Deploy gramarr container'
   docker_container:
-    state: started
-    name: gramarr
-    image: linuxserver/gramarr
-    recreate: true
+    state: 'started'
+    name: 'gramarr'
+    image: 'linuxserver/gramarr'
+    recreate: yes
     volumes:
-        - "{{ configs_dir }}/gramarr:/config"
+      - '{{ configs_dir }}/gramarr:/config'
     networks:
-      - name: cloudnet
+      - name: 'cloudnet'
         aliases:
-          - gramarr
-    networks_cli_compatible: true
-    restart_policy: always
-  when: image is changed
+          - 'gramarr'
+    networks_cli_compatible: yes
+    restart_policy: 'always'
+  when: 'image is changed'

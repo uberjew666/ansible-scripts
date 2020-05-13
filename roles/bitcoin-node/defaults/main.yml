@@ -1,8 +1,8 @@
 ---
-bitcoin_user: bitcoin
-bitcoin_home_dir: /home/{{ bitcoin_user }}
-bitcoin_conf_dir: /etc/bitcoin
-bitcoin_data_dir: /var/lib/bitcoind
-bitcoin_rpc_user: bitcoin
+bitcoin_user: 'bitcoin'
+bitcoin_home_dir: '/home/{{ bitcoin_user }}'
+bitcoin_conf_dir: '/etc/bitcoin'
+bitcoin_data_dir: '/var/lib/bitcoind'
+bitcoin_rpc_user: 'bitcoin'
 bitcoin_rpc_pass:
 bitcoin_rpc_auth:

@@ -1,18 +1,17 @@
 ---
-- name: Install SNMP and prerequisites
+- name: 'Install SNMP and prerequisites'
   apt:
-    name: "{{ item }}"
-    state: present
-  with_items:
-    - snmp
-    - snmp-mibs-downloader
-    
-- name: Configure SNMP
+    name:
+      - 'snmp'
+      - 'snmp-mibs-downloader'
+    state: 'present'
+
+- name: 'Configure SNMP'
   template:
-    src: snmpd.j2
-    dest: /etc/snmp/snmpd.conf
-    owner: root
-    group: root
-    mode: 644
+    src: 'snmpd.j2'
+    dest: '/etc/snmp/snmpd.conf'
+    owner: 'root'
+    group: 'root'
+    mode: '0644'
   notify:
-    - Restart SNMP
+    - 'Restart SNMP'

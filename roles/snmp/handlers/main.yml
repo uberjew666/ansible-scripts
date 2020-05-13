@@ -1,5 +1,5 @@
 ---
-- name: Restart SNMP
+- name: 'Restart SNMP'
   service:
-    name: snmpd
-    state: restarted
+    name: 'snmpd'
+    state: 'restarted'
