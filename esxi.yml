@@ -20,7 +20,7 @@
         validate_certs: no
         esxi_hostname: '{{ esxi_hostname }}'
         datacenter: '{{ datacenter }}'
-        name: 'testvm'
+        name: 'testingvm'
         state: 'present'
         guest_id: 'ubuntu64Guest'
         disk:
@@ -44,7 +44,7 @@
         password: '{{ pass }}'
         validate_certs: no
         datacenter: '{{ datacenter }}'
-        name: 'testvm'
+        name: 'testingvm'
         state: 'poweredoff'
 
     - name: 'Remove new VM'
@@ -54,5 +54,5 @@
         password: '{{ pass }}'
         validate_certs: no
         datacenter: '{{ datacenter }}'
-        name: 'testvm'
+        name: 'testingvm'
         state: 'absent'
